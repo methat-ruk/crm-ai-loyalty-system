@@ -1,0 +1,155 @@
+//////////////////////////////////////
+// CRM + Loyalty + AI Assistant DBML
+// สำหรับ AI / Developer Reference
+//////////////////////////////////////
+
+Table Users {
+  id int [pk, increment]
+  name varchar
+  email varchar [unique]
+  password varchar
+  role varchar
+  status varchar [default: 'active'] // active/inactive
+  last_login timestamp
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table Customers {
+  id int [pk, increment]
+  name varchar
+  email varchar
+  phone varchar
+  membership_level varchar
+  status varchar [default: 'active']
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+
+  created_by int
+  updated_by int
+  owner_id int
+}
+
+Table LoyaltyAccounts {
+  id int [pk, increment]
+  customer_id int [unique]
+  total_points int
+}
+
+Table PointsTransactions {
+  id int [pk, increment]
+  loyalty_account_id int
+  type varchar // Earn / Redeem
+  points int
+  description varchar
+  created_by int
+  created_at timestamp
+}
+
+Table Rewards {
+  id int [pk, increment]
+  name varchar
+  description varchar
+  points_required int
+  stock int
+  status varchar [default: 'active']
+  expiration_date timestamp
+  created_at timestamp
+  updated_at timestamp
+  created_by int
+}
+
+Table RewardRedemptions {
+  id int [pk, increment]
+  customer_id int
+  reward_id int
+  points_used int
+  redeemed_at timestamp
+  status varchar // pending / completed / cancelled
+  handled_by int
+}
+
+Table Promotions {
+  id int [pk, increment]
+  name varchar
+  description varchar
+  discount_type varchar
+  discount_value float
+  start_date timestamp
+  end_date timestamp
+  status varchar [default: 'active']
+  created_at timestamp
+  updated_at timestamp
+  created_by int
+}
+
+Table CustomerSegments {
+  id int [pk, increment]
+  name varchar
+  description varchar
+}
+
+Table CustomerSegmentMap {
+  id int [pk, increment]
+  customer_id int
+  segment_id int
+  assigned_at timestamp
+}
+
+Table PromotionTargets {
+  id int [pk, increment]
+  promotion_id int
+  segment_id int
+  created_at timestamp
+}
+
+Table AIInsights {
+  id int [pk, increment]
+  customer_id int
+  insight_type varchar // segmentation / recommendation / summary
+  content text
+  suggested_promotion_id int
+  confidence_score float
+  created_at timestamp
+  generated_by int // user_id or system
+}
+
+Table ActivityLogs {
+  id int [pk, increment]
+  user_id int
+  action varchar
+  entity_type varchar
+  entity_id int
+  created_at timestamp
+}
+
+//////////////////////////////////////
+// RELATIONSHIPS
+//////////////////////////////////////
+
+Ref: Customers.created_by > Users.id
+Ref: Customers.updated_by > Users.id
+Ref: Customers.owner_id > Users.id
+
+Ref: LoyaltyAccounts.customer_id > Customers.id
+Ref: PointsTransactions.loyalty_account_id > LoyaltyAccounts.id
+
+Ref: RewardRedemptions.customer_id > Customers.id
+Ref: RewardRedemptions.reward_id > Rewards.id
+Ref: RewardRedemptions.handled_by > Users.id
+
+Ref: Rewards.created_by > Users.id
+Ref: Promotions.created_by > Users.id
+
+Ref: CustomerSegmentMap.customer_id > Customers.id
+Ref: CustomerSegmentMap.segment_id > CustomerSegments.id
+
+Ref: PromotionTargets.promotion_id > Promotions.id
+Ref: PromotionTargets.segment_id > CustomerSegments.id
+
+Ref: AIInsights.customer_id > Customers.id
+Ref: AIInsights.generated_by > Users.id
+Ref: AIInsights.suggested_promotion_id > Promotions.id
+
+Ref: ActivityLogs.user_id > Users.id

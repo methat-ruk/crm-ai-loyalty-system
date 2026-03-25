@@ -1,0 +1,58 @@
+{
+  "users": [
+    { "id": 1, "name": "Admin", "email": "admin@crm.com", "role": "admin", "status": "active", "last_login": "2026-03-24T08:00:00Z", "created_at": "2026-01-01T09:00:00Z", "updated_at": "2026-01-01T09:00:00Z" },
+    { "id": 2, "name": "Staff A", "email": "staffA@crm.com", "role": "staff", "status": "active", "last_login": "2026-03-24T08:30:00Z", "created_at": "2026-01-01T09:10:00Z", "updated_at": "2026-01-01T09:10:00Z" },
+    { "id": 3, "name": "Staff B", "email": "staffB@crm.com", "role": "staff", "status": "active", "last_login": "2026-03-24T08:45:00Z", "created_at": "2026-01-01T09:15:00Z", "updated_at": "2026-01-01T09:15:00Z" }
+  ],
+
+  "customers": [
+    { "id": 1, "name": "Alice", "email": "alice@mail.com", "phone": "0812345678", "membership_level": "VIP", "status": "active", "deleted_at": null, "created_at": "2026-01-05T10:00:00Z", "updated_at": "2026-01-10T12:00:00Z", "created_by": 1, "updated_by": 2, "owner_id": 2 },
+    { "id": 2, "name": "Bob", "email": "bob@mail.com", "phone": "0898765432", "membership_level": "Regular", "status": "active", "deleted_at": null, "created_at": "2026-01-06T11:00:00Z", "updated_at": "2026-01-12T15:00:00Z", "created_by": 1, "updated_by": 3, "owner_id": 3 }
+  ],
+
+  "loyalty_accounts": [
+    { "id": 1, "customer_id": 1, "total_points": 150 },
+    { "id": 2, "customer_id": 2, "total_points": 50 }
+  ],
+
+  "points_transactions": [
+    { "id": 1, "loyalty_account_id": 1, "type": "Earn", "points": 100, "description": "Purchase 100 USD", "created_by": 2, "created_at": "2026-01-05T10:05:00Z" },
+    { "id": 2, "loyalty_account_id": 1, "type": "Redeem", "points": -50, "description": "Redeem 10% Discount", "created_by": 2, "created_at": "2026-01-10T12:05:00Z" },
+    { "id": 3, "loyalty_account_id": 2, "type": "Earn", "points": 50, "description": "Purchase 50 USD", "created_by": 3, "created_at": "2026-01-06T11:05:00Z" }
+  ],
+
+  "rewards": [
+    { "id": 1, "name": "10% Discount Coupon", "description": "Use 100 points to get 10% off", "points_required": 100, "stock": 50, "status": "active", "expiration_date": "2026-12-31T23:59:59Z", "created_at": "2026-01-01T09:00:00Z", "updated_at": "2026-01-01T09:00:00Z", "created_by": 1 }
+  ],
+
+  "reward_redemptions": [
+    { "id": 1, "customer_id": 1, "reward_id": 1, "points_used": 50, "redeemed_at": "2026-01-10T12:10:00Z", "status": "completed", "handled_by": 2 }
+  ],
+
+  "promotions": [
+    { "id": 1, "name": "New Year 2026 Sale", "description": "VIP customers get 10% off", "discount_type": "percentage", "discount_value": 10, "start_date": "2026-01-01T00:00:00Z", "end_date": "2026-01-10T23:59:59Z", "status": "active", "created_at": "2026-01-01T09:00:00Z", "updated_at": "2026-01-01T09:00:00Z", "created_by": 1 }
+  ],
+
+  "customer_segments": [
+    { "id": 1, "name": "VIP Customers", "description": "High purchase frequency" },
+    { "id": 2, "name": "Regular Customers", "description": "Normal purchase frequency" }
+  ],
+
+  "customer_segment_map": [
+    { "id": 1, "customer_id": 1, "segment_id": 1, "assigned_at": "2026-01-05T10:01:00Z" },
+    { "id": 2, "customer_id": 2, "segment_id": 2, "assigned_at": "2026-01-06T11:01:00Z" }
+  ],
+
+  "promotion_targets": [
+    { "id": 1, "promotion_id": 1, "segment_id": 1, "created_at": "2026-01-01T09:05:00Z" }
+  ],
+
+  "ai_insights": [
+    { "id": 1, "customer_id": 1, "insight_type": "recommendation", "content": "Alice likely to purchase again, recommend 10% discount", "suggested_promotion_id": 1, "confidence_score": 0.92, "created_at": "2026-01-05T10:10:00Z", "generated_by": 0 }
+  ],
+
+  "activity_logs": [
+    { "id": 1, "user_id": 2, "action": "create_customer", "entity_type": "Customers", "entity_id": 1, "created_at": "2026-01-05T10:00:00Z" },
+    { "id": 2, "user_id": 3, "action": "update_customer", "entity_type": "Customers", "entity_id": 2, "created_at": "2026-01-12T15:00:00Z" }
+  ]
+}
