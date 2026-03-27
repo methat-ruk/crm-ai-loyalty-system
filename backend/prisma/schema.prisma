@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -10,4 +5,192 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  STAFF
+  MARKETING
+}
+
+enum Tier {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+}
+
+enum TransactionType {
+  EARN
+  REDEEM
+  EXPIRE
+  ADJUST
+}
+
+enum RedemptionStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+enum CampaignType {
+  POINTS_MULTIPLIER
+  BONUS_POINTS
+  DISCOUNT
+  FREE_REWARD
+}
+
+enum ActivityType {
+  PROFILE_UPDATED
+  POINTS_EARNED
+  POINTS_REDEEMED
+  REWARD_REDEEMED
+  CAMPAIGN_JOINED
+  TIER_UPGRADED
+}
+
+enum InsightType {
+  CUSTOMER_SEGMENT
+  CHURN_RISK
+  PROMOTION_RECOMMENDATION
+  BEHAVIOR_ANALYSIS
+  GENERAL
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(STAFF)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Customer {
+  id          String    @id @default(cuid())
+  firstName   String
+  lastName    String
+  email       String    @unique
+  phone       String?
+  dateOfBirth DateTime?
+  tier        Tier      @default(BRONZE)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  loyaltyAccount LoyaltyAccount?
+  activities     CustomerActivity[]
+  redemptions    RewardRedemption[]
+  aiInsights     AIInsight[]
+
+  @@map("customers")
+}
+
+model LoyaltyAccount {
+  id             String   @id @default(cuid())
+  customerId     String   @unique
+  totalPoints    Int      @default(0)
+  lifetimePoints Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  customer     Customer             @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  transactions LoyaltyTransaction[]
+
+  @@map("loyalty_accounts")
+}
+
+model LoyaltyTransaction {
+  id               String          @id @default(cuid())
+  loyaltyAccountId String
+  type             TransactionType
+  points           Int
+  description      String
+  referenceId      String?
+  createdAt        DateTime        @default(now())
+
+  loyaltyAccount LoyaltyAccount @relation(fields: [loyaltyAccountId], references: [id], onDelete: Cascade)
+
+  @@map("loyalty_transactions")
+}
+
+model Reward {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  pointsCost  Int
+  stock       Int?
+  isActive    Boolean   @default(true)
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  redemptions RewardRedemption[]
+
+  @@map("rewards")
+}
+
+model RewardRedemption {
+  id         String           @id @default(cuid())
+  customerId String
+  rewardId   String
+  pointsUsed Int
+  status     RedemptionStatus @default(PENDING)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  reward   Reward   @relation(fields: [rewardId], references: [id])
+
+  @@map("reward_redemptions")
+}
+
+model Campaign {
+  id               String       @id @default(cuid())
+  name             String
+  description      String?
+  type             CampaignType
+  pointsMultiplier Float?       @default(1)
+  bonusPoints      Int?
+  startDate        DateTime
+  endDate          DateTime
+  isActive         Boolean      @default(true)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@map("campaigns")
+}
+
+model CustomerActivity {
+  id          String       @id @default(cuid())
+  customerId  String
+  type        ActivityType
+  description String
+  metadata    Json?
+  createdAt   DateTime     @default(now())
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@map("customer_activities")
+}
+
+model AIInsight {
+  id         String      @id @default(cuid())
+  customerId String?
+  type       InsightType
+  content    String
+  metadata   Json?
+  createdAt  DateTime    @default(now())
+
+  customer Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+
+  @@map("ai_insights")
 }
