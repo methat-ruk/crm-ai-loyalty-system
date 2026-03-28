@@ -3,8 +3,8 @@ import {
   UnauthorizedException,
   ConflictException,
 } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import type { LoginDto } from './dto/login.dto.js';
 import type { RegisterDto } from './dto/register.dto.js';
