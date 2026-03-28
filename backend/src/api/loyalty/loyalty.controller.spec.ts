@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { LoyaltyController } from './loyalty.controller';
+import { LoyaltyController } from './loyalty.controller.js';
 
 describe('LoyaltyController', () => {
   let controller: LoyaltyController;
