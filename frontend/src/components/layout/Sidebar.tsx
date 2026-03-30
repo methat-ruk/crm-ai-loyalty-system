@@ -34,7 +34,6 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       className={clsx(
         'flex flex-col w-60 h-screen bg-slate-900 shrink-0 z-50',
         'fixed inset-y-0 left-0 transition-transform duration-300 ease-in-out',
-        'md:relative md:translate-x-0',
         isOpen ? 'translate-x-0' : '-translate-x-full',
       )}
     >
@@ -63,7 +62,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             <Link
               key={href}
               href={href}
-              onClick={onClose}
+              onClick={() => { if (window.innerWidth < 768) onClose() }}
               className={clsx(
                 'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
                 isActive
