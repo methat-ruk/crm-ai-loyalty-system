@@ -286,7 +286,7 @@ export default function CustomersPage() {
                 customers.map((c) => (
                   <tr
                     key={c.id}
-                    className="hover:bg-slate-50 transition-colors cursor-pointer"
+                    className="hover:bg-slate-100 transition-colors cursor-pointer"
                     onClick={() => router.push(`/customers/${c.id}`)}
                   >
                     <td className="px-5 py-3.5">

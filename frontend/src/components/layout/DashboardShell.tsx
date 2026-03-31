@@ -14,21 +14,23 @@ export const DashboardShell = ({
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)')
-    setSidebarOpen(mq.matches)
     const handler = (e: MediaQueryListEvent) => setSidebarOpen(e.matches)
     mq.addEventListener('change', handler)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSidebarOpen(mq.matches)
     return () => mq.removeEventListener('change', handler)
   }, [])
 
   return (
     <div className="flex h-screen bg-slate-100 overflow-hidden">
-      {/* Mobile overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40 md:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+      {/* Mobile overlay — always in DOM, visibility via CSS to avoid hydration mismatch */}
+      <div
+        className={clsx(
+          'fixed inset-0 bg-black/40 z-40 md:hidden transition-opacity duration-300',
+          sidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
+        )}
+        onClick={() => setSidebarOpen(false)}
+      />
 
       <Sidebar
         isOpen={sidebarOpen}
