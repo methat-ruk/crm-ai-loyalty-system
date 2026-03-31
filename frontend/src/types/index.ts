@@ -221,6 +221,16 @@ export interface TopCustomer {
   lifetimePoints: number
 }
 
+export interface TierDistributionItem {
+  tier: Tier
+  count: number
+}
+
+export interface TrendPoint {
+  month: string
+  count: number
+}
+
 // ─── API Response Wrapper ─────────────────────────────────────────────────────
 
 export interface PaginatedResponse<T> {
