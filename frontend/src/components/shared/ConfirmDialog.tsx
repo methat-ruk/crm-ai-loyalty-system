@@ -1,5 +1,6 @@
 'use client'
 
+import { AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface ConfirmDialogProps {
@@ -10,6 +11,7 @@ interface ConfirmDialogProps {
   onConfirm: () => void
   onCancel: () => void
   loading?: boolean
+  error?: string
 }
 
 export const ConfirmDialog = ({
@@ -20,17 +22,24 @@ export const ConfirmDialog = ({
   onConfirm,
   onCancel,
   loading = false,
+  error,
 }: ConfirmDialogProps) => (
   <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
     <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl border border-slate-200 p-6">
       <h2 className="text-base font-semibold text-slate-800">{title}</h2>
       <p className="mt-1.5 text-sm text-slate-500">{description}</p>
+      {error && (
+        <div className="flex items-center gap-2 mt-3 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+          <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+          {error}
+        </div>
+      )}
       <div className="flex items-center justify-end gap-2 mt-6">
         <Button
           variant="ghost"
           onClick={onCancel}
           disabled={loading}
-          className="text-slate-500 cursor-pointer"
+          className="text-slate-500 cursor-pointer bg-slate-200 hover:bg-slate-300"
         >
           Cancel
         </Button>

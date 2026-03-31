@@ -275,6 +275,13 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
 
         <div className="flex gap-2 pt-1">
           <Button
+            type="button"
+            onClick={reset}
+            className="cursor-pointer bg-slate-200 hover:bg-slate-300 text-slate-600"
+          >
+            Clear
+          </Button>
+          <Button
             type="submit"
             disabled={loading}
             className={clsx(
@@ -291,13 +298,6 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
             ) : (
               <><Minus className="w-4 h-4" /> Redeem Points</>
             )}
-          </Button>
-          <Button
-            type="button"
-            onClick={reset}
-            className="cursor-pointer bg-slate-200 hover:bg-slate-300 text-slate-600"
-          >
-            Clear
           </Button>
         </div>
       </form>
@@ -445,7 +445,7 @@ export default function LoyaltyPage() {
                     </span>
                     {/* Date */}
                     <span className="text-xs text-slate-400 shrink-0 hidden sm:block">
-                      {new Date(tx.createdAt).toLocaleDateString()}
+                      {new Date(tx.createdAt).toLocaleDateString()} {new Date(tx.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
                 )
