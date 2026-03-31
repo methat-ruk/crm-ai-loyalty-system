@@ -7,6 +7,7 @@ import { UsersModule } from './api/users/users.module.js';
 import { CustomersModule } from './api/customers/customers.module.js';
 import { LoyaltyModule } from './api/loyalty/loyalty.module.js';
 import { RewardsModule } from './api/rewards/rewards.module.js';
+import { AnalyticsModule } from './api/analytics/analytics.module.js';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { RewardsModule } from './api/rewards/rewards.module.js';
     CustomersModule,
     LoyaltyModule,
     RewardsModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
 })
