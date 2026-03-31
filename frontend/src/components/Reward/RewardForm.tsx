@@ -92,16 +92,16 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-          <h2 className="text-sm font-semibold text-slate-800">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-700/60">
+          <h2 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
             {isEdit ? 'Edit Reward' : 'Add Reward'}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+            className="text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-200 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -111,7 +111,7 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
         <form onSubmit={handleSubmit} className="p-5 space-y-3">
           {/* Name */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500">Name *</label>
+            <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Name *</label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -123,7 +123,7 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
 
           {/* Description */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500">Description</label>
+            <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Description</label>
             <Input
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -135,7 +135,7 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
           {/* Points cost + Stock */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-500">Points Cost *</label>
+              <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Points Cost *</label>
               <Input
                 type="number"
                 value={pointsCost}
@@ -147,7 +147,7 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
               {fieldErrors.pointsCost && <p className="text-xs text-red-500">{fieldErrors.pointsCost}</p>}
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-500">Stock <span className="text-slate-400">(blank = unlimited)</span></label>
+              <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Stock <span className="text-slate-400">(blank = unlimited)</span></label>
               <Input
                 type="number"
                 value={stock}
@@ -162,7 +162,7 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
 
           {/* Expires at */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500">Expires On <span className="text-slate-400">(optional)</span></label>
+            <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Expires On <span className="text-slate-400">(optional)</span></label>
             <Input
               type="date"
               value={expiresAt}
@@ -180,7 +180,7 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
           )}
 
           <div className="flex gap-2 pt-1">
-            <Button type="button" onClick={onClose} className="cursor-pointer bg-slate-200 hover:bg-slate-300 text-slate-700">
+            <Button type="button" onClick={onClose} className="cursor-pointer bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200">
               Cancel
             </Button>
             <Button

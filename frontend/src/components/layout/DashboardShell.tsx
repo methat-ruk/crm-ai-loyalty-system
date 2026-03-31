@@ -22,7 +22,7 @@ export const DashboardShell = ({
   }, [])
 
   return (
-    <div className="flex h-screen bg-slate-100 overflow-hidden">
+    <div className="flex h-screen bg-slate-100 dark:bg-slate-950 overflow-hidden">
       {/* Mobile overlay — always in DOM, visibility via CSS to avoid hydration mismatch */}
       <div
         className={clsx(

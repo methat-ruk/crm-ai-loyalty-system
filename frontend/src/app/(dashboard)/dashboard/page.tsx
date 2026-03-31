@@ -13,6 +13,7 @@ import {
 } from 'recharts'
 import { clsx } from 'clsx'
 import analyticsService from '@/services/analyticsService'
+import { useTheme } from '@/components/providers/ThemeProvider'
 import type { DashboardStats, TopCustomer, TierDistributionItem, TrendPoint, Tier } from '@/types'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -37,18 +38,18 @@ interface KpiCardProps {
 }
 
 const KpiCard = ({ label, value, sub, icon: Icon, iconClass, iconBg, loading }: KpiCardProps) => (
-  <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4">
+  <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-5 flex items-start gap-4">
     <div className={clsx('flex items-center justify-center w-10 h-10 rounded-xl shrink-0', iconBg)}>
       <Icon className={clsx('w-5 h-5', iconClass)} />
     </div>
     <div className="min-w-0 flex-1">
-      <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{label}</p>
+      <p className="text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wide">{label}</p>
       {loading ? (
-        <div className="mt-1 h-7 w-24 bg-slate-100 rounded animate-pulse" />
+        <div className="mt-1 h-7 w-24 bg-slate-100 dark:bg-slate-700 rounded animate-pulse" />
       ) : (
-        <p className="mt-0.5 text-2xl font-bold text-slate-800 leading-tight">{value}</p>
+        <p className="mt-0.5 text-2xl font-bold text-slate-800 dark:text-slate-100 leading-tight">{value}</p>
       )}
-      <p className="mt-0.5 text-xs text-slate-400">{sub}</p>
+      <p className="mt-0.5 text-xs text-slate-400 dark:text-slate-400">{sub}</p>
     </div>
   </div>
 )
@@ -58,9 +59,9 @@ const KpiCard = ({ label, value, sub, icon: Icon, iconClass, iconBg, loading }: 
 const TrendTooltip = ({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-white border border-slate-200 rounded-lg shadow-sm px-3 py-2 text-xs">
-      <p className="font-medium text-slate-700">{label}</p>
-      <p className="text-indigo-600 mt-0.5">{payload[0].value} new customers</p>
+    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm px-3 py-2 text-xs">
+      <p className="font-medium text-slate-700 dark:text-slate-200">{label}</p>
+      <p className="text-indigo-600 dark:text-indigo-500 mt-0.5">{payload[0].value} new customers</p>
     </div>
   )
 }
@@ -68,6 +69,9 @@ const TrendTooltip = ({ active, payload, label }: { active?: boolean; payload?: 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
+
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [topCustomers, setTopCustomers] = useState<TopCustomer[]>([])
   const [tierDist, setTierDist] = useState<TierDistributionItem[]>([])
@@ -102,8 +106,8 @@ export default function DashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-xl font-semibold text-slate-800">Dashboard</h1>
-        <p className="mt-0.5 text-sm text-slate-500">Overview of your CRM system</p>
+        <h1 className="text-xl font-semibold text-slate-800 dark:text-slate-100">Dashboard</h1>
+        <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">Overview of your CRM system</p>
       </div>
 
       {/* KPI Cards */}
@@ -149,10 +153,10 @@ export default function DashboardPage() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* New Customers Trend */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-100">
-            <h2 className="text-sm font-semibold text-slate-700">New Customers</h2>
-            <p className="text-xs text-slate-400 mt-0.5">Last 6 months</p>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+          <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-700/60">
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">New Customers</h2>
+            <p className="text-xs text-slate-400 dark:text-slate-400 mt-0.5">Last 6 months</p>
           </div>
           <div className="p-4">
             {loading ? (
@@ -160,16 +164,16 @@ export default function DashboardPage() {
                 <div className="w-8 h-8 border-2 border-indigo-300 border-t-indigo-600 rounded-full animate-spin" />
               </div>
             ) : trendData.length === 0 ? (
-              <div className="h-44 flex items-center justify-center text-sm text-slate-400">
+              <div className="h-44 flex items-center justify-center text-sm text-slate-400 dark:text-slate-500">
                 No data yet
               </div>
             ) : (
               <ResponsiveContainer width="100%" height={176}>
                 <BarChart data={trendData} barSize={28}>
-                  <XAxis dataKey="label" tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-                  <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} width={28} />
-                  <Tooltip content={<TrendTooltip />} cursor={{ fill: '#f1f5f9' }} />
-                  <Bar dataKey="count" radius={[4, 4, 0, 0]} fill="#6366f1" />
+                  <XAxis dataKey="label" tick={{ fontSize: 11, fill: isDark ? '#cbd5e1' : '#1e293b' }} axisLine={false} tickLine={false} />
+                  <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: isDark ? '#cbd5e1' : '#475569' }} axisLine={false} tickLine={false} width={28} />
+                  <Tooltip content={<TrendTooltip />} cursor={{ fill: isDark ? '#334155' : '#f1f5f9' }} />
+                  <Bar dataKey="count" radius={[4, 4, 0, 0]} fill={isDark ? '#818cf8' : '#6366f1'} />
                 </BarChart>
               </ResponsiveContainer>
             )}
@@ -177,17 +181,17 @@ export default function DashboardPage() {
         </div>
 
         {/* Tier Distribution */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-100">
-            <h2 className="text-sm font-semibold text-slate-700">Tier Distribution</h2>
-            <p className="text-xs text-slate-400 mt-0.5">Customers by loyalty tier</p>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+          <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-700/60">
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Tier Distribution</h2>
+            <p className="text-xs text-slate-400 dark:text-slate-400 mt-0.5">Customers by loyalty tier</p>
           </div>
           <div className="p-5 space-y-3">
             {loading ? (
               Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="space-y-1.5">
-                  <div className="h-3.5 w-24 bg-slate-100 rounded animate-pulse" />
-                  <div className="h-2 bg-slate-100 rounded-full animate-pulse" />
+                  <div className="h-3.5 w-24 bg-slate-100 dark:bg-slate-700 rounded animate-pulse" />
+                  <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full animate-pulse" />
                 </div>
               ))
             ) : (
@@ -201,11 +205,11 @@ export default function DashboardPage() {
                       <span className={clsx('text-xs font-medium px-2 py-0.5 rounded-full', TIER_STYLES[tier].badge)}>
                         {tier}
                       </span>
-                      <span className="text-xs text-slate-500 tabular-nums">
-                        {count.toLocaleString()} <span className="text-slate-400">({pct}%)</span>
+                      <span className="text-xs text-slate-800 dark:text-slate-200 tabular-nums">
+                        {count.toLocaleString()} <span className="text-slate-700 dark:text-slate-300">({pct}%)</span>
                       </span>
                     </div>
-                    <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all duration-500"
                         style={{ width: `${pct}%`, backgroundColor: TIER_STYLES[tier].bar }}
@@ -220,53 +224,53 @@ export default function DashboardPage() {
       </div>
 
       {/* Top Customers */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-semibold text-slate-700">Top Customers</h2>
-            <p className="text-xs text-slate-400 mt-0.5">Ranked by current loyalty points</p>
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Top Customers</h2>
+            <p className="text-xs text-slate-400 dark:text-slate-400 mt-0.5">Ranked by current loyalty points</p>
           </div>
-          <Link href="/customers" className="text-xs text-indigo-600 hover:underline">
+          <Link href="/customers" className="text-xs text-indigo-600 dark:text-slate-200 hover:underline">
             View all
           </Link>
         </div>
         {loading ? (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100 dark:divide-slate-700">
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="flex items-center gap-4 px-5 py-3.5">
-                <div className="w-5 h-3.5 bg-slate-100 rounded animate-pulse" />
+                <div className="w-5 h-3.5 bg-slate-100 dark:bg-slate-700 rounded animate-pulse" />
                 <div className="flex-1 space-y-1.5">
-                  <div className="h-3.5 w-32 bg-slate-100 rounded animate-pulse" />
-                  <div className="h-3 w-44 bg-slate-100 rounded animate-pulse" />
+                  <div className="h-3.5 w-32 bg-slate-100 dark:bg-slate-700 rounded animate-pulse" />
+                  <div className="h-3 w-44 bg-slate-100 dark:bg-slate-700 rounded animate-pulse" />
                 </div>
-                <div className="h-5 w-16 bg-slate-100 rounded-full animate-pulse" />
-                <div className="h-3.5 w-16 bg-slate-100 rounded animate-pulse" />
+                <div className="h-5 w-16 bg-slate-100 dark:bg-slate-700 rounded-full animate-pulse" />
+                <div className="h-3.5 w-16 bg-slate-100 dark:bg-slate-700 rounded animate-pulse" />
               </div>
             ))}
           </div>
         ) : topCustomers.length === 0 ? (
-          <div className="px-5 py-10 text-center text-sm text-slate-400">No customers yet</div>
+          <div className="px-5 py-10 text-center text-sm text-slate-400 dark:text-slate-500">No customers yet</div>
         ) : (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100 dark:divide-slate-700">
             {topCustomers.map((customer, index) => (
               <Link
                 key={customer.id}
                 href={`/customers/${customer.id}`}
-                className="flex items-center gap-4 px-5 py-3.5 hover:bg-slate-50 transition-colors"
+                className="flex items-center gap-4 px-5 py-3.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
               >
-                <span className="w-5 text-xs font-medium text-slate-400 text-right shrink-0">
+                <span className="w-5 text-xs font-medium text-slate-400 dark:text-slate-500 text-right shrink-0">
                   {index + 1}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-slate-800 truncate">
+                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100 truncate">
                     {customer.firstName} {customer.lastName}
                   </p>
-                  <p className="text-xs text-slate-400 truncate">{customer.email}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-400 truncate">{customer.email}</p>
                 </div>
                 <span className={clsx('text-xs font-medium px-2 py-0.5 rounded-full shrink-0', TIER_STYLES[customer.tier].badge)}>
                   {customer.tier}
                 </span>
-                <p className="text-sm font-semibold text-slate-700 shrink-0 tabular-nums">
+                <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 shrink-0 tabular-nums">
                   {customer.totalPoints.toLocaleString()} pts
                 </p>
               </Link>

@@ -63,7 +63,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-100 via-slate-50 to-indigo-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-100 via-slate-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 px-4">
       <div className="w-full max-w-sm">
 
         {/* Brand */}
@@ -83,16 +83,16 @@ export default function LoginPage() {
               />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
             CRM AI Loyalty
           </h1>
-          <p className="mt-1.5 text-sm text-slate-500 font-normal">
+          <p className="mt-1.5 text-sm text-slate-500 dark:text-slate-400 font-normal">
             Sign in to your workspace
           </p>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-200/60 px-8 py-9">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200/80 dark:border-slate-700 shadow-xl shadow-slate-200/60 dark:shadow-slate-900/60 px-8 py-9">
           <form onSubmit={handleSubmit} noValidate className="space-y-6">
 
             {serverError && (
@@ -104,7 +104,7 @@ export default function LoginPage() {
             <div className="space-y-2">
               <Label
                 htmlFor="email"
-                className="text-slate-700 text-sm font-medium"
+                className="text-slate-700 dark:text-slate-200 text-sm font-medium"
               >
                 Email address
               </Label>
@@ -116,7 +116,7 @@ export default function LoginPage() {
                 placeholder="you@company.com"
                 value={form.email}
                 onChange={handleChange}
-                className="h-10 rounded-xl bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400 transition-all focus-visible:bg-white focus-visible:ring-2 focus-visible:ring-indigo-400/60 focus-visible:border-indigo-400"
+                className="h-10 rounded-xl bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-all focus-visible:bg-white focus-visible:ring-2 focus-visible:ring-indigo-400/60 focus-visible:border-indigo-400"
               />
               {errors.email && (
                 <p className="text-xs text-red-500">{errors.email}</p>
@@ -126,7 +126,7 @@ export default function LoginPage() {
             <div className="space-y-2">
               <Label
                 htmlFor="password"
-                className="text-slate-700 text-sm font-medium"
+                className="text-slate-700 dark:text-slate-200 text-sm font-medium"
               >
                 Password
               </Label>
@@ -138,7 +138,7 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 value={form.password}
                 onChange={handleChange}
-                className="h-10 rounded-xl bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400 transition-all focus-visible:bg-white focus-visible:ring-2 focus-visible:ring-indigo-400/60 focus-visible:border-indigo-400"
+                className="h-10 rounded-xl bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-all focus-visible:bg-white focus-visible:ring-2 focus-visible:ring-indigo-400/60 focus-visible:border-indigo-400"
               />
               {errors.password && (
                 <p className="text-xs text-red-500">{errors.password}</p>
@@ -165,7 +165,7 @@ export default function LoginPage() {
           </form>
         </div>
 
-        <p className="mt-6 text-center text-xs text-slate-400">
+        <p className="mt-6 text-center text-xs text-slate-400 dark:text-slate-500">
           CRM AI Loyalty &copy; {new Date().getFullYear()}
         </p>
       </div>
