@@ -19,6 +19,37 @@ const tierStyles: Record<Tier, string> = {
   BRONZE: 'bg-orange-100 text-orange-700',
 }
 
+const TIER_THRESHOLDS: Record<Tier, number> = {
+  BRONZE: 0, SILVER: 1000, GOLD: 5000, PLATINUM: 20000,
+}
+const TIER_ORDER: Tier[] = ['BRONZE', 'SILVER', 'GOLD', 'PLATINUM']
+const TIER_BAR_COLOR: Record<Tier, string> = {
+  BRONZE: 'bg-orange-400', SILVER: 'bg-slate-400', GOLD: 'bg-amber-400', PLATINUM: 'bg-violet-400',
+}
+
+const TierProgress = ({ tier, lifetimePoints }: { tier: Tier; lifetimePoints: number }) => {
+  const idx = TIER_ORDER.indexOf(tier)
+  if (idx === TIER_ORDER.length - 1) {
+    return <p className="text-xs text-violet-600 font-medium text-center">✦ Max tier reached</p>
+  }
+  const next = TIER_ORDER[idx + 1]
+  const from = TIER_THRESHOLDS[tier]
+  const to = TIER_THRESHOLDS[next]
+  const pct = Math.min(100, Math.round(((lifetimePoints - from) / (to - from)) * 100))
+  const needed = to - lifetimePoints
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center justify-between text-xs text-slate-500">
+        <span>{needed.toLocaleString()} pts to <span className={clsx('font-medium', tierStyles[next])}>{next}</span></span>
+        <span className="tabular-nums">{pct}%</span>
+      </div>
+      <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+        <div className={clsx('h-full rounded-full transition-all', TIER_BAR_COLOR[next])} style={{ width: `${pct}%` }} />
+      </div>
+    </div>
+  )
+}
+
 // ─── Section card ─────────────────────────────────────────────────────────────
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
@@ -181,21 +212,24 @@ export default function CustomerDetailPage() {
           )}
         </div>
 
-        {/* Points summary */}
+        {/* Points summary + tier progress */}
         {customer.loyaltyAccount && (
-          <div className="flex gap-6 shrink-0">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-indigo-600 tabular-nums">
-                {customer.loyaltyAccount.totalPoints.toLocaleString()}
-              </p>
-              <p className="text-xs text-slate-400 mt-0.5">Current Points</p>
+          <div className="flex flex-col gap-3 shrink-0 min-w-0 sm:min-w-48">
+            <div className="flex gap-6">
+              <div className="text-center">
+                <p className="text-2xl font-bold text-indigo-600 tabular-nums">
+                  {customer.loyaltyAccount.totalPoints.toLocaleString()}
+                </p>
+                <p className="text-xs text-slate-400 mt-0.5">Current Points</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-slate-700 tabular-nums">
+                  {customer.loyaltyAccount.lifetimePoints.toLocaleString()}
+                </p>
+                <p className="text-xs text-slate-400 mt-0.5">Lifetime Points</p>
+              </div>
             </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-slate-700 tabular-nums">
-                {customer.loyaltyAccount.lifetimePoints.toLocaleString()}
-              </p>
-              <p className="text-xs text-slate-400 mt-0.5">Lifetime Points</p>
-            </div>
+            <TierProgress tier={customer.tier} lifetimePoints={customer.loyaltyAccount.lifetimePoints} />
           </div>
         )}
       </div>

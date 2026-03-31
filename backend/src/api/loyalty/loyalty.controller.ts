@@ -1,4 +1,77 @@
-import { Controller } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { LoyaltyService } from './loyalty.service.js';
+import { earnPointsSchema, type EarnPointsDto } from './dto/earn-points.dto.js';
+import {
+  redeemPointsSchema,
+  type RedeemPointsDto,
+} from './dto/redeem-points.dto.js';
+import {
+  adjustPointsSchema,
+  type AdjustPointsDto,
+} from './dto/adjust-points.dto.js';
+import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe.js';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 
 @Controller('loyalty')
-export class LoyaltyController {}
+@UseGuards(JwtAuthGuard)
+export class LoyaltyController {
+  constructor(private loyaltyService: LoyaltyService) {}
+
+  // GET /loyalty/overview — must be before /:customerId
+  @Get('overview')
+  getOverview() {
+    return this.loyaltyService.getOverview();
+  }
+
+  // GET /loyalty/:customerId
+  @Get(':customerId')
+  getAccount(@Param('customerId') customerId: string) {
+    return this.loyaltyService.getAccount(customerId);
+  }
+
+  // GET /loyalty/:customerId/transactions
+  @Get(':customerId/transactions')
+  getTransactions(
+    @Param('customerId') customerId: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('type') type?: string,
+  ) {
+    return this.loyaltyService.getTransactions(
+      customerId,
+      Number(page) || 1,
+      Number(limit) || 20,
+      type,
+    );
+  }
+
+  // POST /loyalty/earn
+  @Post('earn')
+  earn(@Body(new ZodValidationPipe(earnPointsSchema)) dto: EarnPointsDto) {
+    return this.loyaltyService.earn(dto);
+  }
+
+  // POST /loyalty/redeem
+  @Post('redeem')
+  redeem(
+    @Body(new ZodValidationPipe(redeemPointsSchema)) dto: RedeemPointsDto,
+  ) {
+    return this.loyaltyService.redeem(dto);
+  }
+
+  // POST /loyalty/adjust
+  @Post('adjust')
+  adjust(
+    @Body(new ZodValidationPipe(adjustPointsSchema)) dto: AdjustPointsDto,
+  ) {
+    return this.loyaltyService.adjust(dto);
+  }
+}
