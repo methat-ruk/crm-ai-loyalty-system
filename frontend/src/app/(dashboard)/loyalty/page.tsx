@@ -87,22 +87,22 @@ const CustomerSearch = ({
         className="text-sm"
       />
       {open && results.length > 0 && (
-        <div className="absolute z-50 top-full mt-1 left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
+        <div className="absolute z-50 top-full mt-1 left-0 right-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg overflow-hidden">
           {results.map((c) => (
             <button
               key={c.id}
               type="button"
               onMouseDown={() => handleSelect(c)}
-              className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 text-left transition-colors cursor-pointer"
+              className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 text-left transition-colors cursor-pointer"
             >
               <div className="flex items-center justify-center w-7 h-7 rounded-full bg-indigo-100 text-indigo-600 text-xs font-bold shrink-0">
                 {c.firstName[0]}{c.lastName[0]}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-slate-800 truncate">
+                <p className="text-sm font-medium text-slate-800 dark:text-slate-100 truncate">
                   {c.firstName} {c.lastName}
                 </p>
-                <p className="text-xs text-slate-400 truncate">{c.email}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 truncate">{c.email}</p>
               </div>
               <span className={clsx('text-xs font-medium px-1.5 py-0.5 rounded-full shrink-0', tierStyles[c.tier].badge)}>
                 {c.tier}
@@ -191,17 +191,17 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-      <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-slate-700">Quick Action</h2>
+    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+      <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
+        <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Quick Action</h2>
         {/* Tabs */}
-        <div className="flex items-center rounded-lg border border-slate-200 overflow-hidden text-xs font-medium">
+        <div className="flex items-center rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden text-xs font-medium">
           <button
             type="button"
             onClick={() => handleTabChange('earn')}
             className={clsx(
               'px-3 py-1.5 transition-colors cursor-pointer',
-              tab === 'earn' ? 'bg-emerald-500 text-white' : 'text-slate-500 hover:bg-slate-50',
+              tab === 'earn' ? 'bg-emerald-500 text-white' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50',
             )}
           >
             + Earn
@@ -211,7 +211,7 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
             onClick={() => handleTabChange('redeem')}
             className={clsx(
               'px-3 py-1.5 transition-colors cursor-pointer',
-              tab === 'redeem' ? 'bg-red-500 text-white' : 'text-slate-500 hover:bg-slate-50',
+              tab === 'redeem' ? 'bg-red-500 text-white' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50',
             )}
           >
             − Redeem
@@ -221,14 +221,14 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
 
       <form onSubmit={handleSubmit} className="p-5 space-y-3">
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-slate-500">Customer</label>
+          <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Customer</label>
           <CustomerSearch key={searchKey} value={customer} onSelect={setCustomer} />
           {customer && (
             <div className="flex items-center gap-2 mt-1">
               <span className={clsx('text-xs font-medium px-2 py-0.5 rounded-full', tierStyles[customer.tier].badge)}>
                 {customer.tier}
               </span>
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-slate-500 dark:text-slate-400">
                 Balance:{' '}
                 <span className="font-semibold text-indigo-600 tabular-nums">
                   {(customer.loyaltyAccount?.totalPoints ?? 0).toLocaleString()} pts
@@ -239,7 +239,7 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-slate-500">Points</label>
+          <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Points</label>
           <Input
             type="number"
             placeholder="e.g. 100"
@@ -251,7 +251,7 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-slate-500">Description</label>
+          <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Description</label>
           <Input
             placeholder={tab === 'earn' ? 'e.g. Purchase #1234' : 'e.g. Redeem for coffee'}
             value={description}
@@ -277,7 +277,7 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
           <Button
             type="button"
             onClick={reset}
-            className="cursor-pointer bg-slate-200 hover:bg-slate-300 text-slate-600"
+            className="cursor-pointer bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300"
           >
             Clear
           </Button>
@@ -332,15 +332,15 @@ export default function LoyaltyPage() {
     <div className="space-y-5">
       {/* Page header */}
       <div>
-        <h1 className="text-xl font-semibold text-slate-800">Loyalty</h1>
-        <p className="text-sm text-slate-400 mt-0.5">Points overview and quick actions</p>
+        <h1 className="text-xl font-semibold text-slate-800 dark:text-slate-100">Loyalty</h1>
+        <p className="text-sm text-slate-400 dark:text-slate-500 mt-0.5">Points overview and quick actions</p>
       </div>
 
       {/* Stats row */}
       {loading ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-24 bg-slate-100 rounded-2xl animate-pulse" />
+            <div key={i} className="h-24 bg-slate-100 dark:bg-slate-700 rounded-2xl animate-pulse" />
           ))}
         </div>
       ) : (
@@ -351,12 +351,12 @@ export default function LoyaltyPage() {
             { label: 'Lifetime Points', value: overview?.totalLifetimePoints.toLocaleString() ?? '0', icon: TrendingUp, color: 'text-amber-600', bg: 'bg-amber-50' },
             { label: 'Total Transactions', value: overview?.totalTransactions.toLocaleString() ?? '0', icon: RefreshCw, color: 'text-violet-600', bg: 'bg-violet-50' },
           ].map(({ label, value, icon: Icon, color, bg }) => (
-            <div key={label} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+            <div key={label} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-4">
               <div className={clsx('flex items-center justify-center w-9 h-9 rounded-xl mb-3', bg)}>
                 <Icon className={clsx('w-4.5 h-4.5', color)} />
               </div>
-              <p className="text-2xl font-bold text-slate-800 tabular-nums">{value}</p>
-              <p className="text-xs text-slate-400 mt-0.5">{label}</p>
+              <p className="text-2xl font-bold text-slate-800 dark:text-slate-100 tabular-nums">{value}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{label}</p>
             </div>
           ))}
         </div>
@@ -366,9 +366,9 @@ export default function LoyaltyPage() {
         {/* Left — Tier breakdown + Quick action */}
         <div className="space-y-5">
           {/* Tier distribution */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="px-5 py-4 border-b border-slate-100">
-              <h2 className="text-sm font-semibold text-slate-700">Tier Distribution</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-700/60">
+              <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Tier Distribution</h2>
             </div>
             <div className="p-4 space-y-2.5">
               {(['PLATINUM', 'GOLD', 'SILVER', 'BRONZE'] as const).map((tier) => {
@@ -380,9 +380,9 @@ export default function LoyaltyPage() {
                       <span className={clsx('text-xs font-medium px-2 py-0.5 rounded-full', tierStyles[tier].badge)}>
                         {tier}
                       </span>
-                      <span className="text-xs text-slate-500 tabular-nums">{count.toLocaleString()} · {pct}%</span>
+                      <span className="text-xs text-slate-500 dark:text-slate-300 tabular-nums">{count.toLocaleString()} · {pct}%</span>
                     </div>
-                    <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                       <div
                         className={clsx('h-full rounded-full transition-all', {
                           'bg-violet-400': tier === 'PLATINUM',
@@ -404,35 +404,35 @@ export default function LoyaltyPage() {
         </div>
 
         {/* Right — Recent transactions */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-100">
-            <h2 className="text-sm font-semibold text-slate-700">Recent Transactions</h2>
+        <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+          <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-700/60">
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Recent Transactions</h2>
           </div>
           {loading ? (
             <div className="p-5 space-y-3">
               {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="h-12 bg-slate-100 rounded-xl animate-pulse" />
+                <div key={i} className="h-12 bg-slate-100 dark:bg-slate-700 rounded-xl animate-pulse" />
               ))}
             </div>
           ) : !overview?.recentTransactions.length ? (
-            <div className="px-5 py-10 text-center text-sm text-slate-400">No transactions yet</div>
+            <div className="px-5 py-10 text-center text-sm text-slate-400 dark:text-slate-500">No transactions yet</div>
           ) : (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-slate-100 dark:divide-slate-700">
               {overview.recentTransactions.map((tx) => {
                 const customer = tx.loyaltyAccount.customer
                 const isPositive = tx.type === 'EARN' || tx.type === 'ADJUST'
                 return (
                   <div key={tx.id} className="flex items-center gap-3 px-5 py-3">
                     {/* Avatar */}
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-600 text-xs font-bold shrink-0">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0">
                       {customer.firstName[0]}{customer.lastName[0]}
                     </div>
                     {/* Customer + description */}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-slate-700 truncate">
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate">
                         {customer.firstName} {customer.lastName}
                       </p>
-                      <p className="text-xs text-slate-400 truncate">{tx.description}</p>
+                      <p className="text-xs text-slate-400 dark:text-slate-400 truncate">{tx.description}</p>
                     </div>
                     {/* Type badge */}
                     <span className={clsx('text-xs font-medium px-1.5 py-0.5 rounded-full shrink-0', txTypeStyles[tx.type])}>
@@ -444,7 +444,7 @@ export default function LoyaltyPage() {
                       {isPositive ? '+' : '−'}{tx.points.toLocaleString()}
                     </span>
                     {/* Date */}
-                    <span className="text-xs text-slate-400 shrink-0 hidden sm:block">
+                    <span className="text-xs text-slate-600 dark:text-slate-300 shrink-0 hidden sm:block">
                       {new Date(tx.createdAt).toLocaleDateString()} {new Date(tx.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>

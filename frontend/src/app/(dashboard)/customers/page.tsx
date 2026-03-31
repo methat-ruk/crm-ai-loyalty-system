@@ -146,8 +146,8 @@ export default function CustomersPage() {
       {/* Header */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <h1 className="text-xl font-semibold text-slate-800">Customers</h1>
-          <p className="mt-0.5 text-sm text-slate-500">
+          <h1 className="text-xl font-semibold text-slate-800 dark:text-slate-100">Customers</h1>
+          <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
             {total.toLocaleString()} customer{total !== 1 ? 's' : ''} total
           </p>
         </div>
@@ -161,10 +161,10 @@ export default function CustomersPage() {
       </div>
 
       {/* Search + Filters */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-4">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-4 space-y-4">
         {/* Search */}
         <div className="relative max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500 pointer-events-none" />
           <Input
             className="pl-9"
             placeholder="Search name, email, phone…"
@@ -176,7 +176,7 @@ export default function CustomersPage() {
         <div className="flex flex-wrap gap-4 items-end">
           {/* Tier */}
           <div className="space-y-1.5 w-full sm:w-auto shrink-0">
-            <p className="text-xs font-medium text-slate-500">Tier</p>
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Tier</p>
             <div className="flex items-center gap-1.5">
               {TIERS.map((tier) => (
                 <button
@@ -195,8 +195,8 @@ export default function CustomersPage() {
 
           {/* Status */}
           <div className="space-y-1.5 w-full sm:w-auto shrink-0">
-            <p className="text-xs font-medium text-slate-500">Status</p>
-            <div className="flex items-center rounded-lg border border-slate-200 overflow-hidden text-xs font-medium">
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Status</p>
+            <div className="flex items-center rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden text-xs font-medium">
               {(['all', 'active', 'inactive'] as const).map((s) => (
                 <button
                   key={s}
@@ -206,7 +206,7 @@ export default function CustomersPage() {
                     statusFilter === s && s === 'all' && 'bg-indigo-500 text-white',
                     statusFilter === s && s === 'active' && 'bg-emerald-200 text-emerald-700',
                     statusFilter === s && s === 'inactive' && 'bg-slate-200 slate-500',
-                    statusFilter !== s && 'text-slate-500 hover:bg-slate-50',
+                    statusFilter !== s && 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50',
                   )}
                 >
                   {s}
@@ -217,7 +217,7 @@ export default function CustomersPage() {
 
           {/* Points Range */}
           <div className="space-y-1.5 w-full sm:w-auto shrink-0">
-            <p className="text-xs font-medium text-slate-500">Points Range</p>
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Points Range</p>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
@@ -226,7 +226,7 @@ export default function CustomersPage() {
                 onChange={(e) => setPointsMin(e.target.value)}
                 className="flex-1 sm:w-28 sm:flex-none text-xs"
               />
-              <span className="text-slate-400 text-xs shrink-0">–</span>
+              <span className="text-slate-400 dark:text-slate-500 text-xs shrink-0">–</span>
               <Input
                 type="number"
                 placeholder="Max"
@@ -242,7 +242,7 @@ export default function CustomersPage() {
         {hasFilter && (
           <button
             onClick={resetFilters}
-            className="flex items-center justify-center gap-1.5 w-full text-xs font-medium px-3 py-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100 transition-colors cursor-pointer"
+            className="flex items-center justify-center gap-1.5 w-full text-xs font-medium px-3 py-1.5 rounded-lg bg-red-500 text-white border border-rose-200 hover:bg-red-600 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700 transition-colors cursor-pointer"
           >
             <X className="w-3.5 h-3.5" />
             Reset filters
@@ -251,34 +251,34 @@ export default function CustomersPage() {
       </div>
 
       {/* Table card */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 bg-slate-50">
-                <th className="text-left px-5 py-3 text-xs font-medium text-slate-500 uppercase tracking-wide">Name</th>
-                <th className="text-left px-5 py-3 text-xs font-medium text-slate-500 uppercase tracking-wide hidden sm:table-cell">Email</th>
-                <th className="text-left px-5 py-3 text-xs font-medium text-slate-500 uppercase tracking-wide hidden md:table-cell">Phone</th>
-                <th className="text-left px-5 py-3 text-xs font-medium text-slate-500 uppercase tracking-wide">Tier</th>
-                <th className="text-left px-5 py-3 text-xs font-medium text-slate-500 uppercase tracking-wide hidden sm:table-cell">Points</th>
-                <th className="text-left px-5 py-3 text-xs font-medium text-slate-500 uppercase tracking-wide">Status</th>
+              <tr className="border-b border-slate-100 dark:border-slate-700/60 bg-slate-50 dark:bg-slate-900">
+                <th className="text-left px-5 py-3 text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Name</th>
+                <th className="text-left px-5 py-3 text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide hidden sm:table-cell">Email</th>
+                <th className="text-left px-5 py-3 text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide hidden md:table-cell">Phone</th>
+                <th className="text-left px-5 py-3 text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Tier</th>
+                <th className="text-left px-5 py-3 text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide hidden sm:table-cell">Points</th>
+                <th className="text-left px-5 py-3 text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Status</th>
                 <th className="px-5 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <tr key={i}>
                     {Array.from({ length: 7 }).map((_, j) => (
                       <td key={j} className="px-5 py-3.5">
-                        <div className="h-4 bg-slate-100 rounded animate-pulse" />
+                        <div className="h-4 bg-slate-100 dark:bg-slate-700 rounded animate-pulse" />
                       </td>
                     ))}
                   </tr>
                 ))
               ) : customers.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-5 py-12 text-center text-slate-400 text-sm">
+                  <td colSpan={7} className="px-5 py-12 text-center text-slate-400 dark:text-slate-500 text-sm">
                     No customers found
                   </td>
                 </tr>
@@ -286,7 +286,7 @@ export default function CustomersPage() {
                 customers.map((c) => (
                   <tr
                     key={c.id}
-                    className="hover:bg-slate-100 transition-colors cursor-pointer"
+                    className="hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer"
                     onClick={() => router.push(`/customers/${c.id}`)}
                   >
                     <td className="px-5 py-3.5">
@@ -294,17 +294,17 @@ export default function CustomersPage() {
                         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 text-xs font-semibold shrink-0">
                           {c.firstName[0]}{c.lastName[0]}
                         </div>
-                        <span className="font-medium text-slate-800">{c.firstName} {c.lastName}</span>
+                        <span className="font-medium text-slate-800 dark:text-slate-100">{c.firstName} {c.lastName}</span>
                       </div>
                     </td>
-                    <td className="px-5 py-3.5 text-slate-500 hidden sm:table-cell">{c.email}</td>
-                    <td className="px-5 py-3.5 text-slate-500 hidden md:table-cell">{c.phone ?? '—'}</td>
+                    <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400 hidden sm:table-cell">{c.email}</td>
+                    <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400 hidden md:table-cell">{c.phone ?? '—'}</td>
                     <td className="px-5 py-3.5">
                       <span className={clsx('text-xs font-medium px-2 py-0.5 rounded-full', tierStyles[c.tier])}>
                         {c.tier}
                       </span>
                     </td>
-                    <td className="px-5 py-3.5 text-slate-700 tabular-nums hidden sm:table-cell">
+                    <td className="px-5 py-3.5 text-slate-700 dark:text-slate-200 tabular-nums hidden sm:table-cell">
                       {c.loyaltyAccount?.totalPoints.toLocaleString() ?? '—'}
                     </td>
                     <td className="px-5 py-3.5">
@@ -319,7 +319,7 @@ export default function CustomersPage() {
                       <div className="flex items-center justify-end gap-3">
                         <button
                           onClick={() => openEdit(c)}
-                          className="text-xs text-indigo-600 hover:text-indigo-800 font-medium transition-colors cursor-pointer"
+                          className="text-xs text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium transition-colors cursor-pointer"
                         >
                           Edit
                         </button>
@@ -339,30 +339,30 @@ export default function CustomersPage() {
         </div>
 
         {/* Stats + Pagination */}
-        <div className="flex items-center justify-between gap-4 px-5 py-3 border-t border-slate-100 bg-slate-50 flex-wrap">
+        <div className="flex items-center justify-between gap-4 px-5 py-3 border-t border-slate-100 dark:border-slate-700/60 bg-slate-50 dark:bg-slate-900 flex-wrap">
           <div className="flex items-center gap-4">
-            <span className="text-xs text-slate-500">Total <span className="font-semibold text-slate-700">{total}</span></span>
-            <span className="w-px h-3 bg-slate-200" />
+            <span className="text-xs text-slate-500 dark:text-slate-400">Total <span className="font-semibold text-slate-700 dark:text-slate-200">{total}</span></span>
+            <span className="w-px h-3 bg-slate-200 dark:bg-slate-700" />
             <span className="text-xs text-emerald-600">Active <span className="font-semibold">{activeCount}</span></span>
-            <span className="w-px h-3 bg-slate-200" />
-            <span className="text-xs text-slate-500">Inactive <span className="font-semibold">{inactiveCount}</span></span>
+            <span className="w-px h-3 bg-slate-200 dark:bg-slate-700" />
+            <span className="text-xs text-slate-500 dark:text-slate-400">Inactive <span className="font-semibold">{inactiveCount}</span></span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-400">Page {page} of {totalPages}</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500">Page {page} of {totalPages}</span>
             <div className="flex items-center gap-0.5">
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="p-1.5 rounded-lg hover:bg-slate-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
               >
-                <ChevronLeft className="w-4 h-4 text-slate-600" />
+                <ChevronLeft className="w-4 h-4 text-slate-600 dark:text-slate-300" />
               </button>
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
-                className="p-1.5 rounded-lg hover:bg-slate-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
               >
-                <ChevronRight className="w-4 h-4 text-slate-600" />
+                <ChevronRight className="w-4 h-4 text-slate-600 dark:text-slate-300" />
               </button>
             </div>
           </div>

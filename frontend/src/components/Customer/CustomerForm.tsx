@@ -35,14 +35,14 @@ const Field = ({
   children: React.ReactNode
 }) => (
   <div className="space-y-1.5">
-    <label className="text-xs font-medium text-slate-600">
+    <label className="text-xs font-medium text-slate-600 dark:text-slate-300">
       {label}{required && ' *'}
     </label>
     {children}
     {error ? (
       <p className="text-xs text-red-500">{error}</p>
     ) : hint ? (
-      <p className="text-xs text-slate-400">{hint}</p>
+      <p className="text-xs text-slate-400 dark:text-slate-500">{hint}</p>
     ) : null}
   </div>
 )
@@ -134,13 +134,13 @@ export const CustomerForm = ({ customer, onClose, onSuccess }: CustomerFormProps
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-200">
+      <div className="w-full max-w-md bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-          <h2 className="text-base font-semibold text-slate-800">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-700/60">
+          <h2 className="text-base font-semibold text-slate-800 dark:text-slate-100">
             {isEdit ? 'Edit Customer' : 'Add Customer'}
           </h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-700 transition-colors cursor-pointer">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-200 transition-colors cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -183,7 +183,7 @@ export const CustomerForm = ({ customer, onClose, onSuccess }: CustomerFormProps
 
           {/* Actions */}
           <div className="flex items-center justify-end gap-2 pt-1">
-            <Button type="button" variant="ghost" onClick={onClose} className="text-slate-500 bg-slate-200 hover:bg-slate-300 cursor-pointer">
+            <Button type="button" variant="ghost" onClick={onClose} className="text-slate-500 dark:text-slate-400 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 cursor-pointer">
               Cancel
             </Button>
             <Button

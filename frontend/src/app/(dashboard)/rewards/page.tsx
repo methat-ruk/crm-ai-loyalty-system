@@ -64,8 +64,8 @@ export default function RewardsPage() {
       {/* Header */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <h1 className="text-xl font-semibold text-slate-800">Rewards</h1>
-          <p className="text-sm text-slate-400 mt-0.5">Manage reward catalog and redemptions</p>
+          <h1 className="text-xl font-semibold text-slate-800 dark:text-slate-100">Rewards</h1>
+          <p className="text-sm text-slate-400 dark:text-slate-500 mt-0.5">Manage reward catalog and redemptions</p>
         </div>
         <Button
           onClick={() => setShowForm(true)}
@@ -84,22 +84,22 @@ export default function RewardsPage() {
           { label: 'Inactive', value: stats.inactive, icon: PackageX, color: 'text-slate-500', bg: 'bg-slate-100' },
           { label: 'Total Redemptions', value: stats.redemptions, icon: TicketCheck, color: 'text-violet-600', bg: 'bg-violet-50' },
         ].map(({ label, value, icon: Icon, color, bg }) => (
-          <div key={label} className="bg-white rounded-2xl border border-slate-200 shadow-sm px-4 py-3 flex items-center gap-3">
+          <div key={label} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-4 py-3 flex items-center gap-3">
             <div className={clsx('flex items-center justify-center w-8 h-8 rounded-xl shrink-0', bg)}>
               <Icon className={clsx('w-4 h-4', color)} />
             </div>
             <div>
-              <p className="text-lg font-bold text-slate-800 tabular-nums">{value.toLocaleString()}</p>
-              <p className="text-xs text-slate-400">{label}</p>
+              <p className="text-lg font-bold text-slate-800 dark:text-slate-100 tabular-nums">{value.toLocaleString()}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">{label}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm px-4 py-3 flex flex-wrap gap-3 items-center">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-4 py-3 flex flex-wrap gap-3 items-center">
         <div className="relative flex-1 min-w-48">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
           <Input
             placeholder="Search rewards…"
             value={search}
@@ -107,7 +107,7 @@ export default function RewardsPage() {
             className="pl-8 text-sm"
           />
         </div>
-        <div className="flex items-center rounded-lg border border-slate-200 overflow-hidden text-xs font-medium">
+        <div className="flex items-center rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden text-xs font-medium">
           {(['all', 'active', 'inactive'] as const).map((s) => (
             <button
               key={s}
@@ -117,7 +117,7 @@ export default function RewardsPage() {
                 statusFilter === s && s === 'all' && 'bg-indigo-500 text-white',
                 statusFilter === s && s === 'active' && 'bg-emerald-200 text-emerald-700',
                 statusFilter === s && s === 'inactive' && 'bg-slate-200 text-slate-600',
-                statusFilter !== s && 'text-slate-500 hover:bg-slate-50',
+                statusFilter !== s && 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50',
               )}
             >
               {s}
@@ -130,13 +130,13 @@ export default function RewardsPage() {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-40 bg-slate-100 rounded-2xl animate-pulse" />
+            <div key={i} className="h-40 bg-slate-100 dark:bg-slate-700 rounded-2xl animate-pulse" />
           ))}
         </div>
       ) : rewards.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm px-5 py-16 text-center">
-          <Gift className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-          <p className="text-sm text-slate-400">No rewards found</p>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-16 text-center">
+          <Gift className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
+          <p className="text-sm text-slate-400 dark:text-slate-500">No rewards found</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -147,7 +147,7 @@ export default function RewardsPage() {
               <Link
                 key={reward.id}
                 href={`/rewards/${reward.id}`}
-                className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 hover:shadow-md hover:border-indigo-200 transition-all flex flex-col gap-3"
+                className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-4 hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-700 transition-all flex flex-col gap-3"
               >
                 {/* Top row */}
                 <div className="flex items-start justify-between gap-2">
@@ -175,29 +175,29 @@ export default function RewardsPage() {
 
                 {/* Name + description */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-slate-800 truncate">{reward.name}</p>
+                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{reward.name}</p>
                   {reward.description && (
-                    <p className="text-xs text-slate-400 mt-0.5 line-clamp-2">{reward.description}</p>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5 line-clamp-2">{reward.description}</p>
                   )}
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between pt-1 border-t border-slate-100">
-                  <div className="flex items-center gap-1 text-indigo-600">
+                <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-700/60">
+                  <div className="flex items-center gap-1 text-indigo-600 dark:text-indigo-400">
                     <Star className="w-3.5 h-3.5" />
                     <span className="text-sm font-bold tabular-nums">{reward.pointsCost.toLocaleString()}</span>
-                    <span className="text-xs text-slate-400">pts</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">pts</span>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-slate-400">
+                  <div className="flex items-center gap-2 text-xs text-slate-400 dark:text-slate-500">
                     {reward.stock !== null ? (
-                      <span className={clsx('font-medium', lowStock ? 'text-amber-600' : 'text-slate-500')}>
+                      <span className={clsx('font-medium', lowStock ? 'text-amber-600' : 'text-slate-500 dark:text-slate-400')}>
                         {reward.stock} left
                       </span>
                     ) : (
-                      <span>Unlimited</span>
+                      <span className="text-slate-500 dark:text-slate-400">Unlimited</span>
                     )}
-                    <span>·</span>
-                    <span>{reward._count.redemptions} redeemed</span>
+                    <span className="text-slate-500 dark:text-slate-400">·</span>
+                    <span className="text-slate-500 dark:text-slate-400">{reward._count.redemptions} redeemed</span>
                   </div>
                 </div>
               </Link>
@@ -212,17 +212,17 @@ export default function RewardsPage() {
           <button
             onClick={() => { setPage((p) => p - 1); load(search, statusFilter, page - 1) }}
             disabled={page === 1}
-            className="p-1.5 rounded-lg hover:bg-slate-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <span className="text-sm text-slate-600 tabular-nums">
+          <span className="text-sm text-slate-600 dark:text-slate-300 tabular-nums">
             {page} / {totalPages}
           </span>
           <button
             onClick={() => { setPage((p) => p + 1); load(search, statusFilter, page + 1) }}
             disabled={page === totalPages}
-            className="p-1.5 rounded-lg hover:bg-slate-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
             <ChevronRight className="w-4 h-4" />
           </button>

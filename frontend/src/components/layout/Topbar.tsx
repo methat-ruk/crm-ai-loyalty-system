@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { LogOut, Menu, ChevronRight } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { Button } from '@/components/ui/button'
+import { ThemeToggle } from './ThemeToggle'
 
 interface TopbarProps {
   onMenuClick: () => void
@@ -61,13 +62,13 @@ export const Topbar = ({ onMenuClick }: TopbarProps) => {
     : '?'
 
   return (
-    <header className="flex items-center justify-between gap-3 px-4 md:px-6 h-14 bg-white shadow-sm border-b border-slate-100 shrink-0">
+    <header className="flex items-center justify-between gap-3 px-4 md:px-6 h-14 bg-white dark:bg-slate-900 shadow-sm border-b border-slate-100 dark:border-slate-700/60 shrink-0">
       {/* Left: hamburger + breadcrumb */}
       <div className="flex items-center gap-2 min-w-0">
         {/* Hamburger — always visible */}
         <button
           onClick={onMenuClick}
-          className="text-slate-500 hover:text-slate-800 p-1.5 rounded-lg hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
+          className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors shrink-0 cursor-pointer"
           aria-label="Toggle menu"
         >
           <Menu className="w-5 h-5" />
@@ -78,14 +79,14 @@ export const Topbar = ({ onMenuClick }: TopbarProps) => {
           {breadcrumbs.map((crumb) => (
             <div key={crumb.href} className="flex items-center gap-1 min-w-0">
               {crumb.isLast ? (
-                <span className="text-sm font-medium text-slate-800 truncate">
+                <span className="text-sm font-medium text-slate-800 dark:text-slate-100 truncate">
                   {crumb.label}
                 </span>
               ) : (
                 <>
                   <Link
                     href={crumb.href}
-                    className="text-sm text-slate-400 hover:text-slate-600 transition-colors truncate"
+                    className="text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors truncate"
                   >
                     {crumb.label}
                   </Link>
@@ -104,18 +105,19 @@ export const Topbar = ({ onMenuClick }: TopbarProps) => {
             {initials}
           </div>
           <div className="leading-tight hidden sm:block">
-            <p className="text-sm font-medium text-slate-800">{user?.name}</p>
-            <p className="text-xs text-slate-400">{user?.role}</p>
+            <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{user?.name}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{user?.role}</p>
           </div>
         </div>
 
-        <div className="w-px h-5 bg-slate-200" />
+        <ThemeToggle />
+        <div className="w-px h-5 bg-slate-200 dark:bg-slate-700" />
 
         <Button
           variant="ghost"
           size="sm"
           onClick={handleLogout}
-          className="text-slate-500 hover:text-slate-800 hover:bg-transparent cursor-pointer gap-1.5 transition-colors"
+          className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-transparent hover:bg-transparent cursor-pointer gap-1.5 transition-colors"
         >
           <LogOut className="w-4 h-4" />
           <span className="text-sm">Logout</span>
