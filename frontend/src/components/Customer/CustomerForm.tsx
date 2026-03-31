@@ -183,13 +183,13 @@ export const CustomerForm = ({ customer, onClose, onSuccess }: CustomerFormProps
 
           {/* Actions */}
           <div className="flex items-center justify-end gap-2 pt-1">
-            <Button type="button" variant="ghost" onClick={onClose} className="text-slate-500 cursor-pointer">
+            <Button type="button" variant="ghost" onClick={onClose} className="text-slate-500 bg-slate-200 hover:bg-slate-300 cursor-pointer">
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={loading}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer"
+              className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer"
             >
               {loading ? 'Saving…' : isEdit ? 'Save Changes' : 'Add Customer'}
             </Button>

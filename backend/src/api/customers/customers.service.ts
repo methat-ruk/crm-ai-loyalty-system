@@ -95,6 +95,39 @@ export class CustomersService {
     return customer;
   }
 
+  async getRedemptions(id: string, page = 1, limit = 10) {
+    await this.findOne(id);
+    const where = { customerId: id };
+    const [data, total] = await Promise.all([
+      this.prisma.rewardRedemption.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          reward: { select: { id: true, name: true, pointsCost: true } },
+        },
+      }),
+      this.prisma.rewardRedemption.count({ where }),
+    ]);
+    return { data, total, page, limit, totalPages: Math.ceil(total / limit) };
+  }
+
+  async getActivities(id: string, page = 1, limit = 10) {
+    await this.findOne(id);
+    const where = { customerId: id };
+    const [data, total] = await Promise.all([
+      this.prisma.customerActivity.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.customerActivity.count({ where }),
+    ]);
+    return { data, total, page, limit, totalPages: Math.ceil(total / limit) };
+  }
+
   async create(dto: CreateCustomerDto) {
     try {
       return await this.prisma.customer.create({

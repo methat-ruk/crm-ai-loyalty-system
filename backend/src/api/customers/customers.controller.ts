@@ -48,7 +48,9 @@ export class CustomersController {
     @Query('pointsMax') pointsMax?: string,
   ) {
     const tierList = tiers
-      ? (Array.isArray(tiers) ? tiers : tiers.split(','))
+      ? Array.isArray(tiers)
+        ? tiers
+        : tiers.split(',')
       : undefined;
     const activeFilter =
       isActive === 'true' ? true : isActive === 'false' ? false : undefined;
@@ -66,6 +68,32 @@ export class CustomersController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.customersService.findOne(id);
+  }
+
+  @Get(':id/redemptions')
+  getRedemptions(
+    @Param('id') id: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.customersService.getRedemptions(
+      id,
+      Number(page) || 1,
+      Number(limit) || 10,
+    );
+  }
+
+  @Get(':id/activities')
+  getActivities(
+    @Param('id') id: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.customersService.getActivities(
+      id,
+      Number(page) || 1,
+      Number(limit) || 10,
+    );
   }
 
   @Post()

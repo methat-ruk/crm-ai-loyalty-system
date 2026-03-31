@@ -2,12 +2,14 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { ArrowLeft, Star, ShoppingBag, Clock, Pencil, Trash2 } from 'lucide-react'
+import { ArrowLeft, Star, ShoppingBag, Clock, Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { clsx } from 'clsx'
+
 import { Button } from '@/components/ui/button'
 import { CustomerForm } from '@/components/Customer/CustomerForm'
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog'
 import { customerService, type CustomerDetail } from '@/services/customerService'
+import { loyaltyService } from '@/services/loyaltyService'
 import type { Tier } from '@/types'
 
 // ─── Tier badge ───────────────────────────────────────────────────────────────
@@ -67,6 +69,39 @@ const EmptyRow = ({ label }: { label: string }) => (
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
+// ─── Pagination controls ──────────────────────────────────────────────────────
+
+const PageControls = ({
+  page, totalPages, loading, onChange,
+}: {
+  page: number; totalPages: number; loading: boolean; onChange: (p: number) => void
+}) => {
+  if (totalPages <= 1) return null
+  return (
+    <div className="flex items-center justify-between px-5 py-2.5 border-t border-slate-100">
+      <span className="text-xs text-slate-400 tabular-nums">{page} / {totalPages}</span>
+      <div className="flex items-center gap-1">
+        <button
+          onClick={() => onChange(page - 1)}
+          disabled={page === 1 || loading}
+          className="p-1 rounded hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+        >
+          <ChevronLeft className="w-3.5 h-3.5" />
+        </button>
+        <button
+          onClick={() => onChange(page + 1)}
+          disabled={page === totalPages || loading}
+          className="p-1 rounded hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+        >
+          <ChevronRight className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
 export default function CustomerDetailPage() {
   const { id } = useParams<{ id: string }>()
   const router = useRouter()
@@ -78,11 +113,59 @@ export default function CustomerDetailPage() {
   const [showStatusConfirm, setShowStatusConfirm] = useState(false)
   const [togglingStatus, setTogglingStatus] = useState(false)
 
+  // Transactions pagination
+  const [txPage, setTxPage] = useState(1)
+  const [txData, setTxData] = useState<CustomerDetail['loyaltyAccount']>()
+  const [txTotalPages, setTxTotalPages] = useState(1)
+  const [txLoading, setTxLoading] = useState(false)
+
+  // Redemptions pagination
+  const [rdPage, setRdPage] = useState(1)
+  const [rdData, setRdData] = useState<CustomerDetail['redemptions']>([])
+  const [rdTotalPages, setRdTotalPages] = useState(1)
+  const [rdLoading, setRdLoading] = useState(false)
+
+  // Activities pagination
+  const [acPage, setAcPage] = useState(1)
+  const [acData, setAcData] = useState<CustomerDetail['activities']>([])
+  const [acTotalPages, setAcTotalPages] = useState(1)
+  const [acLoading, setAcLoading] = useState(false)
+
+  const loadTransactions = useCallback(async (cid: string, p: number) => {
+    setTxLoading(true)
+    try {
+      const res = await loyaltyService.getTransactions(cid, { page: p, limit: 10 })
+      setTxData((prev) => prev ? { ...prev, transactions: res.data } : prev)
+      setTxTotalPages(res.totalPages)
+    } finally { setTxLoading(false) }
+  }, [])
+
+  const loadRedemptions = useCallback(async (cid: string, p: number) => {
+    setRdLoading(true)
+    try {
+      const res = await customerService.getRedemptions(cid, { page: p, limit: 10 })
+      setRdData(res.data as CustomerDetail['redemptions'])
+      setRdTotalPages(res.totalPages)
+    } finally { setRdLoading(false) }
+  }, [])
+
+  const loadActivities = useCallback(async (cid: string, p: number) => {
+    setAcLoading(true)
+    try {
+      const res = await customerService.getActivities(cid, { page: p, limit: 10 })
+      setAcData(res.data as CustomerDetail['activities'])
+      setAcTotalPages(res.totalPages)
+    } finally { setAcLoading(false) }
+  }, [])
+
   const load = useCallback(async () => {
     setLoading(true)
     try {
       const data = await customerService.getOne(id)
       setCustomer(data)
+      setTxData(data.loyaltyAccount)
+      setRdData(data.redemptions)
+      setAcData(data.activities)
     } catch {
       router.push('/customers')
     } finally {
@@ -145,7 +228,6 @@ export default function CustomerDetailPage() {
 
         {/* Action buttons */}
         <div className="flex items-center gap-2">
-          {/* Deactivate / Activate */}
           <Button
             onClick={() => setShowStatusConfirm(true)}
             className={clsx(
@@ -157,8 +239,7 @@ export default function CustomerDetailPage() {
           >
             {customer.isActive ? 'Deactivate' : 'Activate'}
           </Button>
-
-          {/* Edit — primary */}
+          <div className="w-px h-6 bg-slate-200" />
           <Button
             onClick={() => setShowEdit(true)}
             className="gap-1.5 cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white"
@@ -166,11 +247,6 @@ export default function CustomerDetailPage() {
             <Pencil className="w-4 h-4" />
             Edit
           </Button>
-
-          {/* Divider */}
-          <div className="w-px h-6 bg-slate-200" />
-
-          {/* Delete — destructive */}
           <Button
             onClick={() => setShowDelete(true)}
             className="gap-1.5 cursor-pointer bg-red-600 hover:bg-red-700 text-white"
@@ -235,80 +311,88 @@ export default function CustomerDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        {/* Recent Transactions */}
-        <Section title="Recent Transactions">
-          {!customer.loyaltyAccount?.transactions.length ? (
+        {/* Transactions */}
+        <Section title="Transactions">
+          {txLoading ? (
+            <div className="px-5 py-4 space-y-2">
+              {Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-10 bg-slate-100 rounded-lg animate-pulse" />)}
+            </div>
+          ) : !txData?.transactions.length ? (
             <EmptyRow label="No transactions yet" />
           ) : (
-            customer.loyaltyAccount.transactions.map((tx) => (
+            txData.transactions.map((tx) => (
               <div key={tx.id} className="flex items-center gap-3 px-5 py-3">
-                <div className={clsx(
-                  'flex items-center justify-center w-7 h-7 rounded-full shrink-0',
-                  tx.type === 'EARN' ? 'bg-emerald-100' : 'bg-red-100',
-                )}>
+                <div className={clsx('flex items-center justify-center w-7 h-7 rounded-full shrink-0', tx.type === 'EARN' ? 'bg-emerald-100' : 'bg-red-100')}>
                   <Star className={clsx('w-3.5 h-3.5', tx.type === 'EARN' ? 'text-emerald-600' : 'text-red-500')} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-slate-700 truncate">{tx.description}</p>
-                  <p className="text-xs text-slate-400">{new Date(tx.createdAt).toLocaleDateString()}</p>
+                  <p className="text-xs text-slate-400">{new Date(tx.createdAt).toLocaleDateString()} {new Date(tx.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                 </div>
-                <span className={clsx('text-sm font-semibold tabular-nums shrink-0',
-                  tx.type === 'EARN' ? 'text-emerald-600' : 'text-red-500')}>
+                <span className={clsx('text-sm font-semibold tabular-nums shrink-0', tx.type === 'EARN' ? 'text-emerald-600' : 'text-red-500')}>
                   {tx.type === 'EARN' ? '+' : '-'}{tx.points.toLocaleString()}
                 </span>
               </div>
             ))
           )}
+          <PageControls page={txPage} totalPages={txTotalPages} loading={txLoading} onChange={(p) => { setTxPage(p); loadTransactions(id, p) }} />
         </Section>
 
-        {/* Recent Redemptions */}
-        <Section title="Recent Redemptions">
-          {!customer.redemptions.length ? (
+        {/* Redemptions */}
+        <Section title="Redemptions">
+          {rdLoading ? (
+            <div className="px-5 py-4 space-y-2">
+              {Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-10 bg-slate-100 rounded-lg animate-pulse" />)}
+            </div>
+          ) : !rdData.length ? (
             <EmptyRow label="No redemptions yet" />
           ) : (
-            customer.redemptions.map((r) => (
+            rdData.map((r) => (
               <div key={r.id} className="flex items-center gap-3 px-5 py-3">
                 <div className="flex items-center justify-center w-7 h-7 rounded-full bg-violet-100 shrink-0">
                   <ShoppingBag className="w-3.5 h-3.5 text-violet-600" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-slate-700 truncate">{r.reward.name}</p>
-                  <p className="text-xs text-slate-400">{new Date(r.createdAt).toLocaleDateString()}</p>
+                  <p className="text-xs text-slate-400">{new Date(r.createdAt).toLocaleDateString()} {new Date(r.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="text-sm font-semibold text-slate-700 tabular-nums">
-                    {r.pointsUsed.toLocaleString()} pts
-                  </p>
+                  <p className="text-sm font-semibold text-slate-700 tabular-nums">{r.pointsUsed.toLocaleString()} pts</p>
                   <span className={clsx('text-xs font-medium px-1.5 py-0.5 rounded-full',
                     r.status === 'COMPLETED' ? 'bg-emerald-100 text-emerald-700' :
-                    r.status === 'PENDING'   ? 'bg-amber-100 text-amber-700' :
-                                               'bg-slate-100 text-slate-500')}>
+                    r.status === 'PENDING'   ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-600')}>
                     {r.status}
                   </span>
                 </div>
               </div>
             ))
           )}
+          <PageControls page={rdPage} totalPages={rdTotalPages} loading={rdLoading} onChange={(p) => { setRdPage(p); loadRedemptions(id, p) }} />
         </Section>
 
         {/* Activity Timeline */}
         <Section title="Activity Timeline">
-          {!customer.activities.length ? (
+          {acLoading ? (
+            <div className="px-5 py-4 space-y-2">
+              {Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-10 bg-slate-100 rounded-lg animate-pulse" />)}
+            </div>
+          ) : !acData.length ? (
             <EmptyRow label="No activity yet" />
           ) : (
-            customer.activities.map((a) => (
+            acData.map((a) => (
               <div key={a.id} className="flex items-start gap-3 px-5 py-3">
                 <div className="flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 shrink-0 mt-0.5">
                   <Clock className="w-3.5 h-3.5 text-slate-500" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-slate-700">{a.description}</p>
-                  <p className="text-xs text-slate-400">{new Date(a.createdAt).toLocaleDateString()}</p>
+                  <p className="text-xs text-slate-400">{new Date(a.createdAt).toLocaleDateString()} {new Date(a.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                 </div>
                 <span className="text-xs text-slate-400 shrink-0 mt-0.5">{a.type.replace(/_/g, ' ')}</span>
               </div>
             ))
           )}
+          <PageControls page={acPage} totalPages={acTotalPages} loading={acLoading} onChange={(p) => { setAcPage(p); loadActivities(id, p) }} />
         </Section>
       </div>
 

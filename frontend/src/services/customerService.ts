@@ -73,6 +73,22 @@ export const customerService = {
     return data
   },
 
+  getRedemptions: async (
+    id: string,
+    params?: { page?: number; limit?: number },
+  ): Promise<PaginatedResponse<CustomerDetail['redemptions'][number]>> => {
+    const { data } = await api.get(`/customers/${id}/redemptions`, { params })
+    return data
+  },
+
+  getActivities: async (
+    id: string,
+    params?: { page?: number; limit?: number },
+  ): Promise<PaginatedResponse<CustomerDetail['activities'][number]>> => {
+    const { data } = await api.get(`/customers/${id}/activities`, { params })
+    return data
+  },
+
   checkEmail: async (email: string, excludeId?: string): Promise<{ available: boolean }> => {
     const { data } = await api.get<{ available: boolean }>('/customers/check-email', {
       params: { email, excludeId },
