@@ -171,6 +171,7 @@ export interface CreateCampaignPayload {
   bonusPoints?: number
   startDate: string
   endDate: string
+  isActive?: boolean
 }
 
 // ─── Activity ─────────────────────────────────────────────────────────────────
