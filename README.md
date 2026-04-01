@@ -1,244 +1,198 @@
-# crm-ai-loyalty-system
+# CRM AI Loyalty System
 
-โปรเจกต์ระบบ **CRM (Customer Relationship Management) และ Loyalty Management** ที่พัฒนาแบบ **Full-Stack** สำหรับจัดการข้อมูลลูกค้า ระบบคะแนนสะสม (Loyalty Points) และสิทธิประโยชน์สำหรับสมาชิก (Rewards)
+A full-stack **CRM + Loyalty Management** platform with AI-powered customer insights. Built as a portfolio project demonstrating Full-Stack Development, REST API Design, Database Design, and AI Integration.
 
-ระบบมีการใช้ **AI (Artificial Intelligence)** เพื่อช่วยวิเคราะห์พฤติกรรมลูกค้า (Customer Behavior Analysis) และสร้างข้อมูลเชิงลึก (Customer Insights) เพื่อช่วยในการทำการตลาดและการออกแบบโปรโมชั่น
+## Tech Stack
 
-โปรเจกต์นี้พัฒนาเพื่อใช้เป็น **Portfolio** สำหรับแสดงทักษะด้าน
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js 16, TypeScript, Tailwind CSS 4, Shadcn UI |
+| Backend | NestJS 11, TypeScript, Zod |
+| Database | PostgreSQL, Prisma ORM |
+| AI | Mock Mode (default) · Groq (free) · OpenAI |
 
-- Full-Stack Development
-- REST API Development
-- Database Design
-- AI Integration
-- System Design
+## Features
 
----
-
-# Mini CRM + Loyalty + AI Assistant
-
-ระบบจำลอง **Customer Loyalty Platform** ที่ใช้ในธุรกิจ เช่น
-
-- Retail
-- E-commerce
-- Restaurant
-- Membership Programs
-
----
-
-# Features (ฟีเจอร์ของระบบ)
-
-## Authentication & Access Control
-
-ระบบยืนยันตัวตนและกำหนดสิทธิ์ผู้ใช้งาน
-
-- User Login / Logout
-- Role-based Access Control (RBAC)
-- Admin / Staff / Marketing Roles
+- **Authentication** — JWT login, role-based access (Admin / Staff / Marketing)
+- **Customer Management** — CRUD, profile, activity timeline
+- **Loyalty System** — Earn & redeem points, transaction history
+- **Rewards Management** — Catalog, stock, redemptions
+- **Promotions** — Campaign CRUD, 4 types, active/inactive toggle
+- **Analytics Dashboard** — Stats, charts, tier distribution, top customers
+- **AI Insights** — Customer behavior summary, churn risk, promo recommendations
+- **Dark Mode** — System preference + manual toggle with persistence
 
 ---
 
-## Customer Management (การจัดการข้อมูลลูกค้า)
+## Prerequisites
 
-- Create Customer (เพิ่มลูกค้า)
-- Update Customer Profile (แก้ไขข้อมูลลูกค้า)
-- Delete Customer
-- Customer Profile Page
-- Customer Activity Timeline
-
-ข้อมูลลูกค้าตัวอย่าง
-
-- Name
-- Email
-- Phone
-- Membership Level
-- Total Loyalty Points
+- Node.js 20+
+- PostgreSQL 15+
+- npm
 
 ---
 
-## Loyalty System (ระบบคะแนนสะสม)
+## Getting Started
 
-ระบบจัดการคะแนนสะสมของลูกค้า
+### 1. Clone the repository
 
-- Earn Loyalty Points (รับคะแนนจากการซื้อสินค้า)
-- Redeem Points (ใช้คะแนนแลกของรางวัล)
-- Loyalty Points Balance (คะแนนคงเหลือ)
-- Points Transaction History (ประวัติการใช้คะแนน)
+```bash
+git clone <repo-url>
+cd crm-ai-loyalty
+```
 
-ตัวอย่าง Transaction
+### 2. Setup Backend
 
-| Date       | Action        | Points |
-| ---------- | ------------- | ------ |
-| 1 Jan 2026 | Purchase      | +50    |
-| 5 Jan 2026 | Redeem Reward | -30    |
+```bash
+cd backend
+npm install
+```
 
----
+Copy environment file and fill in your values:
 
-## Rewards Management (ระบบของรางวัล)
+```bash
+cp .env.example .env
+```
 
-ระบบจัดการของรางวัลที่ลูกค้าสามารถใช้คะแนนแลกได้
+Edit `.env`:
 
-- Create Rewards (สร้างของรางวัล)
-- Rewards Catalog (รายการของรางวัล)
-- Reward Redemption (การแลกของรางวัล)
-- Reward Points Cost (จำนวนคะแนนที่ใช้แลก)
-- Reward Expiration Date (วันหมดอายุของรางวัล)
+```env
+DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/crm_ai_db"
+PORT=4000
+JWT_SECRET="any-random-secret-string"
+JWT_EXPIRES_IN="7d"
+FRONTEND_URL="http://localhost:3000"
 
-ตัวอย่าง Rewards
+# AI Provider: mock (no key needed) | groq | openai
+AI_PROVIDER=mock
+AI_API_KEY=
+AI_MODEL=
+```
 
-| Reward              | Points Required |
-| ------------------- | --------------- |
-| 10% Discount Coupon | 100             |
-| Free Drink          | 150             |
-| VIP Gift Set        | 500             |
+Run database migration:
 
----
+```bash
+npx prisma migrate deploy
+```
 
-## Promotions & Campaigns (โปรโมชั่นและแคมเปญ)
+Seed demo data:
 
-ระบบจัดการโปรโมชั่นทางการตลาด
+```bash
+npm run seed
+```
 
-- Create Promotion Campaign
-- Assign Promotions to Customer Segments
-- Promotion Validity Period (ช่วงเวลาโปรโมชั่น)
+Start backend:
 
-ตัวอย่าง
+```bash
+npm run start:dev
+```
 
-- New Year Campaign 2026
-- VIP Exclusive Discount
-
----
-
-## Analytics Dashboard (แดชบอร์ดวิเคราะห์ข้อมูล)
-
-Dashboard สำหรับดูข้อมูลเชิงสถิติของระบบ
-
-ตัวอย่าง Metrics
-
-- Total Customers
-- Active Customers
-- Total Loyalty Points Issued
-- Top Customers
-- Most Redeemed Rewards
+Backend runs at `http://localhost:4000`
 
 ---
 
-## AI Features (ฟีเจอร์ AI)
+### 3. Setup Frontend
 
-ระบบใช้ AI เพื่อช่วยวิเคราะห์ข้อมูลลูกค้า
+```bash
+cd ../frontend
+npm install
+```
 
-### AI Customer Segmentation
+Copy environment file:
 
-แบ่งกลุ่มลูกค้าอัตโนมัติ เช่น
+```bash
+cp .env.example .env.local
+```
 
-- VIP Customers
-- Regular Customers
-- At-Risk Customers
+`.env.local` should contain:
 
----
+```env
+NEXT_PUBLIC_API_URL=http://localhost:4000/api
+```
 
-### AI Promotion Recommendation
+Start frontend:
 
-AI แนะนำโปรโมชั่นที่เหมาะสมกับลูกค้าแต่ละกลุ่ม
+```bash
+npm run dev
+```
 
-ตัวอย่าง
-
-"ลูกค้ากลุ่ม VIP มีแนวโน้มซื้อซ้ำสูง แนะนำโปรโมชั่นส่วนลด 10%"
-
----
-
-### AI Customer Insight Summary
-
-AI สรุปข้อมูลพฤติกรรมลูกค้า เช่น
-
-- Purchase frequency
-- Customer lifetime value
-- Loyalty engagement
+Frontend runs at `http://localhost:3000`
 
 ---
 
-# User Flow (ตัวอย่างการทำงานของระบบ)
+## Demo Accounts
 
-1. Admin Login เข้าสู่ระบบ
-2. เพิ่มข้อมูลลูกค้า (Create Customer)
-3. ลูกค้าทำการซื้อสินค้าและได้รับ Loyalty Points
-4. ระบบบันทึก Points Transaction
-5. ลูกค้าใช้คะแนนแลก Rewards
-6. AI วิเคราะห์พฤติกรรมลูกค้า
-7. ระบบแนะนำโปรโมชั่น
-8. ผู้ดูแลดูข้อมูลผ่าน Analytics Dashboard
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@crm.com | password123 |
+| Staff | staff@crm.com | password123 |
+| Marketing | marketing@crm.com | password123 |
 
 ---
 
-# Tech Stack (เทคโนโลยีที่ใช้)
+## AI Insights Setup
 
-Frontend
+By default the app runs in **Mock Mode** — no API key required. AI responses are pre-written samples.
 
-- Next.js
-- Tailwind CSS
-- Axios
+To use real AI, update `AI_PROVIDER` in `backend/.env`:
 
-Backend
+**Groq (Free)**
+```env
+AI_PROVIDER=groq
+AI_API_KEY=your-groq-api-key
+AI_MODEL=llama-3.1-8b-instant
+```
+Get a free key at [console.groq.com](https://console.groq.com)
 
-- Node.js
-- NestJS
-
-Database
-
-- PostgreSQL
-
-ORM
-
-- Prisma
-
-AI
-
-- OpenAI API
+**OpenAI**
+```env
+AI_PROVIDER=openai
+AI_API_KEY=sk-...
+AI_MODEL=gpt-4o-mini
+```
 
 ---
 
-# API Modules
+## Project Structure
 
-ตัวอย่าง API ในระบบ
+```
+crm-ai-loyalty/
+├── backend/
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   ├── seed.ts
+│   │   └── migrations/
+│   └── src/
+│       ├── api/
+│       │   ├── ai/
+│       │   ├── analytics/
+│       │   ├── auth/
+│       │   ├── customers/
+│       │   ├── loyalty/
+│       │   ├── promotions/
+│       │   └── rewards/
+│       └── main.ts
+└── frontend/
+    └── src/
+        ├── app/(dashboard)/
+        │   ├── ai-insights/
+        │   ├── customers/
+        │   ├── dashboard/
+        │   ├── loyalty/
+        │   ├── promotions/
+        │   └── rewards/
+        ├── components/
+        └── services/
+```
 
-/api/auth
-/api/customers
-/api/loyalty
-/api/rewards
-/api/promotions
-/api/analytics
-/api/ai
+## API Endpoints
 
----
-
-# Database Core Entities
-
-ตารางหลักของระบบ
-
-- Users – system users (admin/staff)
-- Customers – customer profiles
-- LoyaltyAccounts – point balance per customer
-- PointsTransactions – history of point changes
-- Rewards – redeemable rewards
-- RewardRedemptions – redemption records
-- Promotions – marketing campaigns
-
----
-
-# Future Improvements
-
-- Email Notification System
-- AI Predictive Analytics
-- Customer Lifetime Value Prediction
-- Marketing Campaign Automation
-- Mobile App Integration
-
----
-
-# Purpose of this Project
-
-โปรเจกต์นี้สร้างขึ้นเพื่อ
-
-- ฝึกการพัฒนา Full-Stack Application
-- แสดงความสามารถด้าน System Design
-- ทดลองใช้ AI กับระบบธุรกิจ
-- ใช้เป็น Portfolio สำหรับสมัครงาน
+| Module | Endpoints |
+|--------|-----------|
+| Auth | `POST /api/auth/login` |
+| Customers | `GET/POST /api/customers` · `GET/PATCH/DELETE /api/customers/:id` |
+| Loyalty | `GET /api/loyalty/:customerId` · `POST /api/loyalty/adjust` |
+| Rewards | `GET/POST /api/rewards` · `GET/PATCH/DELETE /api/rewards/:id` |
+| Promotions | `GET/POST /api/promotions` · `PATCH /api/promotions/:id/toggle` |
+| Analytics | `GET /api/analytics/overview` · `/tier-distribution` · `/top-customers` |
+| AI | `POST /api/ai/customer-insight` · `POST /api/ai/promo-recommendation` · `GET /api/ai/insights` |

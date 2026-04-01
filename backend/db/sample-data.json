@@ -1,58 +1,72 @@
 {
+  "note": "Sample data matching prisma/seed.ts — run 'npm run seed' to insert into database",
+
   "users": [
-    { "id": 1, "name": "Admin", "email": "admin@crm.com", "role": "admin", "status": "active", "last_login": "2026-03-24T08:00:00Z", "created_at": "2026-01-01T09:00:00Z", "updated_at": "2026-01-01T09:00:00Z" },
-    { "id": 2, "name": "Staff A", "email": "staffA@crm.com", "role": "staff", "status": "active", "last_login": "2026-03-24T08:30:00Z", "created_at": "2026-01-01T09:10:00Z", "updated_at": "2026-01-01T09:10:00Z" },
-    { "id": 3, "name": "Staff B", "email": "staffB@crm.com", "role": "staff", "status": "active", "last_login": "2026-03-24T08:45:00Z", "created_at": "2026-01-01T09:15:00Z", "updated_at": "2026-01-01T09:15:00Z" }
+    { "email": "admin@crm.com",     "name": "Admin User",     "role": "ADMIN",     "isActive": true },
+    { "email": "staff@crm.com",     "name": "Staff User",     "role": "STAFF",     "isActive": true },
+    { "email": "marketing@crm.com", "name": "Marketing User", "role": "MARKETING", "isActive": true }
   ],
 
   "customers": [
-    { "id": 1, "name": "Alice", "email": "alice@mail.com", "phone": "0812345678", "membership_level": "VIP", "status": "active", "deleted_at": null, "created_at": "2026-01-05T10:00:00Z", "updated_at": "2026-01-10T12:00:00Z", "created_by": 1, "updated_by": 2, "owner_id": 2 },
-    { "id": 2, "name": "Bob", "email": "bob@mail.com", "phone": "0898765432", "membership_level": "Regular", "status": "active", "deleted_at": null, "created_at": "2026-01-06T11:00:00Z", "updated_at": "2026-01-12T15:00:00Z", "created_by": 1, "updated_by": 3, "owner_id": 3 }
+    { "firstName": "Somchai",   "lastName": "Jaidee",   "email": "somchai@example.com",   "tier": "PLATINUM", "phone": "081-111-1111", "dateOfBirth": "1985-03-15" },
+    { "firstName": "Wanida",    "lastName": "Sriwong",  "email": "wanida@example.com",    "tier": "GOLD",     "phone": "082-222-2222", "dateOfBirth": "1990-07-22" },
+    { "firstName": "Prasert",   "lastName": "Boonma",   "email": "prasert@example.com",   "tier": "GOLD",     "phone": "083-333-3333", "dateOfBirth": "1988-11-05" },
+    { "firstName": "Nattaya",   "lastName": "Chaiwong", "email": "nattaya@example.com",   "tier": "SILVER",   "phone": "084-444-4444", "dateOfBirth": "1995-01-30" },
+    { "firstName": "Kittisak",  "lastName": "Phomma",   "email": "kittisak@example.com",  "tier": "SILVER",   "phone": "085-555-5555", "dateOfBirth": "1992-09-18" },
+    { "firstName": "Siriporn",  "lastName": "Thongdee", "email": "siriporn@example.com",  "tier": "BRONZE",   "phone": "086-666-6666", "dateOfBirth": "1998-05-12" },
+    { "firstName": "Chakrit",   "lastName": "Nilkham",  "email": "chakrit@example.com",   "tier": "BRONZE",   "phone": "087-777-7777", "dateOfBirth": "2000-12-25" },
+    { "firstName": "Malee",     "lastName": "Kongsuk",  "email": "malee@example.com",     "tier": "BRONZE",   "phone": "088-888-8888", "dateOfBirth": "1997-08-08" },
+    { "firstName": "Thanakorn", "lastName": "Srisuk",   "email": "thanakorn@example.com", "tier": "SILVER",   "phone": "089-999-9999", "dateOfBirth": "1993-04-20" },
+    { "firstName": "Pornpan",   "lastName": "Ruangrat", "email": "pornpan@example.com",   "tier": "BRONZE",   "phone": "090-000-0000", "dateOfBirth": "2001-02-14" }
   ],
 
   "loyalty_accounts": [
-    { "id": 1, "customer_id": 1, "total_points": 150 },
-    { "id": 2, "customer_id": 2, "total_points": 50 }
+    { "customerId": "somchai@example.com",   "totalPoints": 12500, "lifetimePoints": 28000 },
+    { "customerId": "wanida@example.com",    "totalPoints": 6800,  "lifetimePoints": 15000 },
+    { "customerId": "prasert@example.com",   "totalPoints": 5200,  "lifetimePoints": 12000 },
+    { "customerId": "nattaya@example.com",   "totalPoints": 2100,  "lifetimePoints": 5500  },
+    { "customerId": "kittisak@example.com",  "totalPoints": 1800,  "lifetimePoints": 4200  },
+    { "customerId": "siriporn@example.com",  "totalPoints": 450,   "lifetimePoints": 950   },
+    { "customerId": "chakrit@example.com",   "totalPoints": 320,   "lifetimePoints": 700   },
+    { "customerId": "malee@example.com",     "totalPoints": 180,   "lifetimePoints": 400   },
+    { "customerId": "thanakorn@example.com", "totalPoints": 2900,  "lifetimePoints": 6800  },
+    { "customerId": "pornpan@example.com",   "totalPoints": 90,    "lifetimePoints": 200   }
   ],
 
-  "points_transactions": [
-    { "id": 1, "loyalty_account_id": 1, "type": "Earn", "points": 100, "description": "Purchase 100 USD", "created_by": 2, "created_at": "2026-01-05T10:05:00Z" },
-    { "id": 2, "loyalty_account_id": 1, "type": "Redeem", "points": -50, "description": "Redeem 10% Discount", "created_by": 2, "created_at": "2026-01-10T12:05:00Z" },
-    { "id": 3, "loyalty_account_id": 2, "type": "Earn", "points": 50, "description": "Purchase 50 USD", "created_by": 3, "created_at": "2026-01-06T11:05:00Z" }
+  "loyalty_transactions": [
+    { "type": "EARN",   "points": 500,  "description": "Purchase - Order #1001" },
+    { "type": "EARN",   "points": 300,  "description": "Purchase - Order #1002" },
+    { "type": "REDEEM", "points": -200, "description": "Redeemed: Free Drink"   },
+    { "type": "EARN",   "points": 150,  "description": "Purchase - Order #1003" },
+    { "type": "ADJUST", "points": 50,   "description": "Bonus points - Birthday"}
   ],
 
   "rewards": [
-    { "id": 1, "name": "10% Discount Coupon", "description": "Use 100 points to get 10% off", "points_required": 100, "stock": 50, "status": "active", "expiration_date": "2026-12-31T23:59:59Z", "created_at": "2026-01-01T09:00:00Z", "updated_at": "2026-01-01T09:00:00Z", "created_by": 1 }
+    { "name": "Free Coffee",          "description": "Redeem for a free hot or iced coffee", "pointsCost": 150,  "stock": 50  },
+    { "name": "10% Discount Coupon",  "description": "Get 10% off your next purchase",        "pointsCost": 200,  "stock": 100 },
+    { "name": "Free Dessert",         "description": "Choose any dessert from the menu",      "pointsCost": 300,  "stock": 30  },
+    { "name": "VIP Gift Set",         "description": "Premium gift set for VIP members",      "pointsCost": 1000, "stock": 10  },
+    { "name": "Birthday Bonus Pack",  "description": "Special pack for birthday month",       "pointsCost": 500,  "stock": 25  }
   ],
 
-  "reward_redemptions": [
-    { "id": 1, "customer_id": 1, "reward_id": 1, "points_used": 50, "redeemed_at": "2026-01-10T12:10:00Z", "status": "completed", "handled_by": 2 }
-  ],
-
-  "promotions": [
-    { "id": 1, "name": "New Year 2026 Sale", "description": "VIP customers get 10% off", "discount_type": "percentage", "discount_value": 10, "start_date": "2026-01-01T00:00:00Z", "end_date": "2026-01-10T23:59:59Z", "status": "active", "created_at": "2026-01-01T09:00:00Z", "updated_at": "2026-01-01T09:00:00Z", "created_by": 1 }
-  ],
-
-  "customer_segments": [
-    { "id": 1, "name": "VIP Customers", "description": "High purchase frequency" },
-    { "id": 2, "name": "Regular Customers", "description": "Normal purchase frequency" }
-  ],
-
-  "customer_segment_map": [
-    { "id": 1, "customer_id": 1, "segment_id": 1, "assigned_at": "2026-01-05T10:01:00Z" },
-    { "id": 2, "customer_id": 2, "segment_id": 2, "assigned_at": "2026-01-06T11:01:00Z" }
-  ],
-
-  "promotion_targets": [
-    { "id": 1, "promotion_id": 1, "segment_id": 1, "created_at": "2026-01-01T09:05:00Z" }
+  "campaigns": [
+    { "name": "Summer Double Points",   "type": "POINTS_MULTIPLIER", "pointsMultiplier": 2.0, "startDate": "2026-06-01", "endDate": "2026-08-31", "isActive": true  },
+    { "name": "New Member Welcome",     "type": "BONUS_POINTS",      "bonusPoints": 500,       "startDate": "2026-01-01", "endDate": "2026-12-31", "isActive": true  },
+    { "name": "Weekend Discount",       "type": "DISCOUNT",                                    "startDate": "2026-04-01", "endDate": "2026-06-30", "isActive": true  },
+    { "name": "Platinum Free Reward",   "type": "FREE_REWARD",                                 "startDate": "2026-01-01", "endDate": "2026-12-31", "isActive": true  },
+    { "name": "Year-End Triple Points", "type": "POINTS_MULTIPLIER", "pointsMultiplier": 3.0, "startDate": "2025-12-01", "endDate": "2025-12-31", "isActive": false }
   ],
 
   "ai_insights": [
-    { "id": 1, "customer_id": 1, "insight_type": "recommendation", "content": "Alice likely to purchase again, recommend 10% discount", "suggested_promotion_id": 1, "confidence_score": 0.92, "created_at": "2026-01-05T10:10:00Z", "generated_by": 0 }
-  ],
-
-  "activity_logs": [
-    { "id": 1, "user_id": 2, "action": "create_customer", "entity_type": "Customers", "entity_id": 1, "created_at": "2026-01-05T10:00:00Z" },
-    { "id": 2, "user_id": 3, "action": "update_customer", "entity_type": "Customers", "entity_id": 2, "created_at": "2026-01-12T15:00:00Z" }
+    {
+      "type": "CHURN_RISK",
+      "content": "ลูกค้ามีกิจกรรมสม่ำเสมอ ความเสี่ยง Churn: ต่ำ แนะนำให้ส่ง reward พิเศษในวันเกิด",
+      "metadata": { "provider": "mock" }
+    },
+    {
+      "type": "PROMOTION_RECOMMENDATION",
+      "content": "แนะนำ Double Points Weekend เพื่อกระตุ้น Bronze tier ให้ยกระดับเป็น Silver",
+      "metadata": { "provider": "mock" }
+    }
   ]
 }

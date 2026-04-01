@@ -8,7 +8,6 @@ import {
   Star,
   Gift,
   Tag,
-  BarChart2,
   Sparkles,
 } from 'lucide-react'
 import { clsx } from 'clsx'
@@ -24,7 +23,6 @@ const navItems = [
   { label: 'Loyalty', href: '/loyalty', icon: Star },
   { label: 'Rewards', href: '/rewards', icon: Gift },
   { label: 'Promotions', href: '/promotions', icon: Tag },
-  { label: 'Analytics', href: '/analytics', icon: BarChart2 },
   { label: 'AI Insights', href: '/ai-insights', icon: Sparkles },
 ]
 

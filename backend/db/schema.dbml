@@ -1,155 +1,125 @@
 //////////////////////////////////////
-// CRM + Loyalty + AI Assistant DBML
-// สำหรับ AI / Developer Reference
+// CRM AI Loyalty System - DBML Schema
+// Matches actual Prisma schema (prisma/schema.prisma)
 //////////////////////////////////////
 
-Table Users {
-  id int [pk, increment]
-  name varchar
-  email varchar [unique]
-  password varchar
-  role varchar
-  status varchar [default: 'active'] // active/inactive
-  last_login timestamp
-  created_at timestamp
-  updated_at timestamp
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+// Role:             ADMIN | STAFF | MARKETING
+// Tier:             BRONZE | SILVER | GOLD | PLATINUM
+// TransactionType:  EARN | REDEEM | EXPIRE | ADJUST
+// RedemptionStatus: PENDING | COMPLETED | CANCELLED
+// CampaignType:     POINTS_MULTIPLIER | BONUS_POINTS | DISCOUNT | FREE_REWARD
+// ActivityType:     PROFILE_UPDATED | POINTS_EARNED | POINTS_REDEEMED | REWARD_REDEEMED | CAMPAIGN_JOINED | TIER_UPGRADED
+// InsightType:      CUSTOMER_SEGMENT | CHURN_RISK | PROMOTION_RECOMMENDATION | BEHAVIOR_ANALYSIS | GENERAL
+
+// ─── Tables ───────────────────────────────────────────────────────────────────
+
+Table users {
+  id        varchar [pk, note: 'cuid']
+  email     varchar [unique]
+  password  varchar
+  name      varchar
+  role      varchar [note: 'ADMIN | STAFF | MARKETING', default: 'STAFF']
+  isActive  boolean [default: true]
+  createdAt timestamp
+  updatedAt timestamp
 }
 
-Table Customers {
-  id int [pk, increment]
-  name varchar
-  email varchar
-  phone varchar
-  membership_level varchar
-  status varchar [default: 'active']
-  deleted_at timestamp
-  created_at timestamp
-  updated_at timestamp
-
-  created_by int
-  updated_by int
-  owner_id int
+Table customers {
+  id          varchar [pk, note: 'cuid']
+  firstName   varchar
+  lastName    varchar
+  email       varchar [unique]
+  phone       varchar [null]
+  dateOfBirth timestamp [null]
+  tier        varchar [note: 'BRONZE | SILVER | GOLD | PLATINUM', default: 'BRONZE']
+  isActive    boolean [default: true]
+  createdAt   timestamp
+  updatedAt   timestamp
 }
 
-Table LoyaltyAccounts {
-  id int [pk, increment]
-  customer_id int [unique]
-  total_points int
+Table loyalty_accounts {
+  id             varchar [pk, note: 'cuid']
+  customerId     varchar [unique, ref: > customers.id]
+  totalPoints    int [default: 0]
+  lifetimePoints int [default: 0]
+  createdAt      timestamp
+  updatedAt      timestamp
 }
 
-Table PointsTransactions {
-  id int [pk, increment]
-  loyalty_account_id int
-  type varchar // Earn / Redeem
-  points int
+Table loyalty_transactions {
+  id               varchar [pk, note: 'cuid']
+  loyaltyAccountId varchar [ref: > loyalty_accounts.id]
+  type             varchar [note: 'EARN | REDEEM | EXPIRE | ADJUST']
+  points           int
+  description      varchar
+  referenceId      varchar [null]
+  createdAt        timestamp
+}
+
+Table rewards {
+  id          varchar [pk, note: 'cuid']
+  name        varchar
+  description varchar [null]
+  pointsCost  int
+  stock       int [null]
+  isActive    boolean [default: true]
+  expiresAt   timestamp [null]
+  createdAt   timestamp
+  updatedAt   timestamp
+}
+
+Table reward_redemptions {
+  id         varchar [pk, note: 'cuid']
+  customerId varchar [ref: > customers.id]
+  rewardId   varchar [ref: > rewards.id]
+  pointsUsed int
+  status     varchar [note: 'PENDING | COMPLETED | CANCELLED', default: 'PENDING']
+  createdAt  timestamp
+  updatedAt  timestamp
+}
+
+Table campaigns {
+  id               varchar [pk, note: 'cuid']
+  name             varchar
+  description      varchar [null]
+  type             varchar [note: 'POINTS_MULTIPLIER | BONUS_POINTS | DISCOUNT | FREE_REWARD']
+  pointsMultiplier float [null, default: 1]
+  bonusPoints      int [null]
+  startDate        timestamp
+  endDate          timestamp
+  isActive         boolean [default: true]
+  createdAt        timestamp
+  updatedAt        timestamp
+}
+
+Table customer_activities {
+  id          varchar [pk, note: 'cuid']
+  customerId  varchar [ref: > customers.id]
+  type        varchar [note: 'PROFILE_UPDATED | POINTS_EARNED | POINTS_REDEEMED | REWARD_REDEEMED | CAMPAIGN_JOINED | TIER_UPGRADED']
   description varchar
-  created_by int
-  created_at timestamp
+  metadata    json [null]
+  createdAt   timestamp
 }
 
-Table Rewards {
-  id int [pk, increment]
-  name varchar
-  description varchar
-  points_required int
-  stock int
-  status varchar [default: 'active']
-  expiration_date timestamp
-  created_at timestamp
-  updated_at timestamp
-  created_by int
+Table ai_insights {
+  id         varchar [pk, note: 'cuid']
+  customerId varchar [null, ref: > customers.id]
+  type       varchar [note: 'CUSTOMER_SEGMENT | CHURN_RISK | PROMOTION_RECOMMENDATION | BEHAVIOR_ANALYSIS | GENERAL']
+  content    text
+  metadata   json [null]
+  createdAt  timestamp
 }
 
-Table RewardRedemptions {
-  id int [pk, increment]
-  customer_id int
-  reward_id int
-  points_used int
-  redeemed_at timestamp
-  status varchar // pending / completed / cancelled
-  handled_by int
-}
+// ─── Relationships ────────────────────────────────────────────────────────────
 
-Table Promotions {
-  id int [pk, increment]
-  name varchar
-  description varchar
-  discount_type varchar
-  discount_value float
-  start_date timestamp
-  end_date timestamp
-  status varchar [default: 'active']
-  created_at timestamp
-  updated_at timestamp
-  created_by int
-}
+// One-to-One
+Ref: loyalty_accounts.customerId - customers.id   // each customer has one loyalty account
 
-Table CustomerSegments {
-  id int [pk, increment]
-  name varchar
-  description varchar
-}
-
-Table CustomerSegmentMap {
-  id int [pk, increment]
-  customer_id int
-  segment_id int
-  assigned_at timestamp
-}
-
-Table PromotionTargets {
-  id int [pk, increment]
-  promotion_id int
-  segment_id int
-  created_at timestamp
-}
-
-Table AIInsights {
-  id int [pk, increment]
-  customer_id int
-  insight_type varchar // segmentation / recommendation / summary
-  content text
-  suggested_promotion_id int
-  confidence_score float
-  created_at timestamp
-  generated_by int // user_id or system
-}
-
-Table ActivityLogs {
-  id int [pk, increment]
-  user_id int
-  action varchar
-  entity_type varchar
-  entity_id int
-  created_at timestamp
-}
-
-//////////////////////////////////////
-// RELATIONSHIPS
-//////////////////////////////////////
-
-Ref: Customers.created_by > Users.id
-Ref: Customers.updated_by > Users.id
-Ref: Customers.owner_id > Users.id
-
-Ref: LoyaltyAccounts.customer_id > Customers.id
-Ref: PointsTransactions.loyalty_account_id > LoyaltyAccounts.id
-
-Ref: RewardRedemptions.customer_id > Customers.id
-Ref: RewardRedemptions.reward_id > Rewards.id
-Ref: RewardRedemptions.handled_by > Users.id
-
-Ref: Rewards.created_by > Users.id
-Ref: Promotions.created_by > Users.id
-
-Ref: CustomerSegmentMap.customer_id > Customers.id
-Ref: CustomerSegmentMap.segment_id > CustomerSegments.id
-
-Ref: PromotionTargets.promotion_id > Promotions.id
-Ref: PromotionTargets.segment_id > CustomerSegments.id
-
-Ref: AIInsights.customer_id > Customers.id
-Ref: AIInsights.generated_by > Users.id
-Ref: AIInsights.suggested_promotion_id > Promotions.id
-
-Ref: ActivityLogs.user_id > Users.id
+// One-to-Many
+Ref: loyalty_transactions.loyaltyAccountId > loyalty_accounts.id   // account has many transactions
+Ref: reward_redemptions.customerId > customers.id                   // customer has many redemptions
+Ref: reward_redemptions.rewardId > rewards.id                       // reward has many redemptions
+Ref: customer_activities.customerId > customers.id                  // customer has many activities
+Ref: ai_insights.customerId > customers.id                          // customer has many AI insights (optional)
