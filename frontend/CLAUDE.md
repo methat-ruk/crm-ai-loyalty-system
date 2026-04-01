@@ -24,7 +24,7 @@
 
 ## 1. Technical Stack & Versions
 
-- **Frontend:** Next.js 16.x (App Router), TypeScript 5.x (Strict mode), Tailwind CSS 4.x, Shadcn UI (Radix UI), Lucide React
+- **Frontend:** Next.js 16.x (App Router), TypeScript 5.x, Tailwind CSS 4.x, Shadcn UI (Radix UI), Lucide React
 - **Backend:** Node.js 24.x, NestJS 11.x
 - **Database:** PostgreSQL 18.x
 - **ORM:** Prisma 7.x (with PostgreSQL)
@@ -58,17 +58,17 @@
 
 ## 4. Folder Structure Standards
 
-- `/app`: All routes and layouts
+Folders that exist in the current implementation:
+
+- `/app`: All routes and layouts (App Router)
 - `/components/ui`: Atomic components (Shadcn)
-- `/components/shared`: Reusable business components
-- `/lib`: Server-side utilities, DB clients (Prisma/Drizzle)
-- `/hooks`: Custom React hooks
-- `/types`: Shared TypeScript definitions
-- `/services`: Business logic and API services
-- `/utils`: Helper functions and utility logic
-- `/constants`: Application-wide constants
-- `/config`: App configuration and environment setup
-- `/store`: Global state management (e.g., Zustand)
+- `/components/shared`: Reusable business components (e.g., ConfirmDialog)
+- `/components/layout`: Sidebar, Topbar, ThemeToggle
+- `/components/providers`: Context providers (e.g., ThemeProvider)
+- `/lib`: HTTP client and utilities (e.g., `api.ts` — axios instance)
+- `/types`: Shared TypeScript definitions (`index.ts`)
+- `/services`: API call layer (e.g., `customerService.ts`, `aiService.ts`)
+- `/store`: Global state management via Zustand (e.g., `authStore.ts`)
 
 ---
 
@@ -337,8 +337,9 @@ Include core sections such as:
 - Loyalty
 - Rewards
 - Promotions
-- Analytics
 - AI Insights
+
+Note: Analytics is covered within the Dashboard page and is not a separate nav item.
 
 Users should always know where they are and how to move through the system.
 
@@ -372,14 +373,23 @@ These elements make the system feel complete and reliable.
 
 ## 12. Theme Direction
 
-The interface should primarily use a light theme as the main design direction.
+The system supports both **Light** and **Dark** mode via a toggle in the Topbar, with localStorage persistence and system preference fallback.
 
-- The background should be light and neutral, such as white or soft gray tones.
-- Avoid backgrounds that are too bright (pure white) or too dark, as they can cause visual fatigue during long usage sessions.
-- Use soft contrast and subtle color variations to maintain readability while keeping the interface comfortable for extended use.
-- Emphasize clarity and readability, especially since the system will display data-heavy content.
+**Light mode (default):**
+- Background: white and soft gray (`slate-50`, `slate-100`)
+- Text: dark slate (`slate-800`, `slate-700`)
+- Borders: `slate-200`
 
-This system is intended for daily operational use, so comfort, clarity, and long-term readability should take priority over stylistic themes.
+**Dark mode:**
+- Background: `slate-900` (sidebar), `slate-800` (cards), `slate-900` (page)
+- Text: `slate-100`, `slate-300`
+- Borders: `slate-700`
+
+**Shared rules:**
+- Use `dark:` Tailwind prefix for all dark mode classes — toggled via `.dark` class on `<html>`
+- Avoid pure white (#fff) or pure black (#000) — use slate scale for visual comfort
+- Maintain consistent contrast across both themes for readability on data-heavy content
+- Chart colors must adapt to theme (use `isDark` flag from `useTheme()` hook)
 
 ## Final Principle
 
