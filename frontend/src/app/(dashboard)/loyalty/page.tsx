@@ -1,12 +1,13 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Star, TrendingUp, Users, RefreshCw, Plus, Minus, AlertCircle } from 'lucide-react'
+import { Star, TrendingUp, Users, RefreshCw, Plus, Minus, ChevronLeft, ChevronRight } from 'lucide-react'
+import { toast } from 'sonner'
 import { clsx } from 'clsx'
 import axios from 'axios'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { loyaltyService, type LoyaltyOverview } from '@/services/loyaltyService'
+import { loyaltyService, type LoyaltyOverview, type GlobalTransaction } from '@/services/loyaltyService'
 import { customerService } from '@/services/customerService'
 import type { Customer, TransactionType } from '@/types'
 
@@ -125,33 +126,30 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
   const [points, setPoints] = useState('')
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
   const [searchKey, setSearchKey] = useState(0)
+  const [fieldErrors, setFieldErrors] = useState<{ points?: string; description?: string }>({})
 
   const reset = () => {
     setCustomer(null)
     setPoints('')
     setDescription('')
-    setError('')
-    setSuccess('')
+    setFieldErrors({})
     setSearchKey((k) => k + 1)
   }
 
   const handleTabChange = (t: ActionTab) => {
     setTab(t)
-    setError('')
-    setSuccess('')
+    setFieldErrors({})
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
-    setSuccess('')
-    if (!customer) { setError('Please select a customer'); return }
+    const errors: { points?: string; description?: string } = {}
+    if (!customer) { toast.error('Please select a customer'); return }
     const pts = parseInt(points)
-    if (!pts || pts <= 0) { setError('Points must be a positive number'); return }
-    if (!description.trim()) { setError('Description is required'); return }
+    if (!pts || pts <= 0) errors.points = 'Must be a positive number'
+    if (!description.trim()) errors.description = 'Required'
+    if (Object.keys(errors).length > 0) { setFieldErrors(errors); return }
 
     setLoading(true)
     try {
@@ -175,15 +173,15 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
         }
       })
       if (tab === 'earn' && result.tierChanged) {
-        setSuccess(`${result.message} · Tier upgraded to ${result.tier}!`)
+        toast.success(`${result.message} · Tier upgraded to ${result.tier}!`)
       } else {
-        setSuccess(result.message)
+        toast.success(result.message)
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message ?? 'Something went wrong')
+        toast.error(err.response?.data?.message ?? 'Something went wrong')
       } else {
-        setError('Something went wrong')
+        toast.error('Something went wrong')
       }
     } finally {
       setLoading(false)
@@ -244,10 +242,11 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
             type="number"
             placeholder="e.g. 100"
             value={points}
-            onChange={(e) => setPoints(e.target.value)}
+            onChange={(e) => { setPoints(e.target.value); setFieldErrors((p) => ({ ...p, points: undefined })) }}
             min={1}
-            className="text-sm"
+            className={clsx('text-sm', fieldErrors.points && 'border-red-400 focus-visible:ring-red-200')}
           />
+          {fieldErrors.points && <p className="text-xs text-red-500">{fieldErrors.points}</p>}
         </div>
 
         <div className="space-y-1.5">
@@ -255,23 +254,11 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
           <Input
             placeholder={tab === 'earn' ? 'e.g. Purchase #1234' : 'e.g. Redeem for coffee'}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="text-sm"
+            onChange={(e) => { setDescription(e.target.value); setFieldErrors((p) => ({ ...p, description: undefined })) }}
+            className={clsx('text-sm', fieldErrors.description && 'border-red-400 focus-visible:ring-red-200')}
           />
+          {fieldErrors.description && <p className="text-xs text-red-500">{fieldErrors.description}</p>}
         </div>
-
-        {error && (
-          <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-            {error}
-          </div>
-        )}
-        {success && (
-          <div className="flex items-center gap-2 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
-            <Star className="w-3.5 h-3.5 shrink-0" />
-            {success}
-          </div>
-        )}
 
         <div className="flex gap-2 pt-1">
           <Button
@@ -311,6 +298,25 @@ export default function LoyaltyPage() {
   const [overview, setOverview] = useState<LoyaltyOverview | null>(null)
   const [loading, setLoading] = useState(true)
 
+  // Transactions pagination
+  const [txPage, setTxPage] = useState(1)
+  const [txData, setTxData] = useState<GlobalTransaction[]>([])
+  const [txTotal, setTxTotal] = useState(0)
+  const [txTotalPages, setTxTotalPages] = useState(1)
+  const [txLoading, setTxLoading] = useState(false)
+
+  const loadTransactions = useCallback(async (p: number) => {
+    setTxLoading(true)
+    try {
+      const res = await loyaltyService.getAllTransactions({ page: p, limit: 15 })
+      setTxData(res.data)
+      setTxTotal(res.total)
+      setTxTotalPages(res.totalPages)
+    } finally {
+      setTxLoading(false)
+    }
+  }, [])
+
   const load = useCallback(async () => {
     try {
       const data = await loyaltyService.getOverview()
@@ -321,6 +327,7 @@ export default function LoyaltyPage() {
   }, [])
 
   useEffect(() => { load() }, [load])
+  useEffect(() => { loadTransactions(1) }, [loadTransactions])
 
   const totalTierCustomers =
     (overview?.tierCounts.BRONZE ?? 0) +
@@ -403,53 +410,70 @@ export default function LoyaltyPage() {
           <QuickAction onSuccess={load} />
         </div>
 
-        {/* Right — Recent transactions */}
+        {/* Right — Transactions (paginated) */}
         <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-700/60">
-            <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Recent Transactions</h2>
+          <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Transactions</h2>
+            <span className="text-xs text-slate-400 dark:text-slate-500 tabular-nums">{txTotal.toLocaleString()} total</span>
           </div>
-          {loading ? (
+          {txLoading ? (
             <div className="p-5 space-y-3">
               {Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="h-12 bg-slate-100 dark:bg-slate-700 rounded-xl animate-pulse" />
               ))}
             </div>
-          ) : !overview?.recentTransactions.length ? (
+          ) : !txData.length ? (
             <div className="px-5 py-10 text-center text-sm text-slate-400 dark:text-slate-500">No transactions yet</div>
           ) : (
             <div className="divide-y divide-slate-100 dark:divide-slate-700">
-              {overview.recentTransactions.map((tx) => {
+              {txData.map((tx) => {
                 const customer = tx.loyaltyAccount.customer
                 const isPositive = tx.type === 'EARN' || tx.type === 'ADJUST'
                 return (
                   <div key={tx.id} className="flex items-center gap-3 px-5 py-3">
-                    {/* Avatar */}
                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0">
                       {customer.firstName[0]}{customer.lastName[0]}
                     </div>
-                    {/* Customer + description */}
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate">
                         {customer.firstName} {customer.lastName}
                       </p>
                       <p className="text-xs text-slate-400 dark:text-slate-400 truncate">{tx.description}</p>
                     </div>
-                    {/* Type badge */}
                     <span className={clsx('text-xs font-medium px-1.5 py-0.5 rounded-full shrink-0', txTypeStyles[tx.type])}>
                       {tx.type}
                     </span>
-                    {/* Points */}
                     <span className={clsx('text-sm font-semibold tabular-nums shrink-0 w-16 text-right',
                       isPositive ? 'text-emerald-600' : 'text-red-500')}>
                       {isPositive ? '+' : '−'}{tx.points.toLocaleString()}
                     </span>
-                    {/* Date */}
                     <span className="text-xs text-slate-600 dark:text-slate-300 shrink-0 hidden sm:block">
                       {new Date(tx.createdAt).toLocaleDateString()} {new Date(tx.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
                 )
               })}
+            </div>
+          )}
+          {txTotalPages > 1 && (
+            <div className="flex items-center justify-between px-5 py-2.5 border-t border-slate-100 dark:border-slate-700/60">
+              <span className="text-xs text-slate-400 dark:text-slate-500 tabular-nums">{txPage} / {txTotalPages}</span>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => { setTxPage(txPage - 1); loadTransactions(txPage - 1) }}
+                  disabled={txPage === 1 || txLoading}
+                  className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => { setTxPage(txPage + 1); loadTransactions(txPage + 1) }}
+                  disabled={txPage === txTotalPages || txLoading}
+                  className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                >
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
           )}
         </div>

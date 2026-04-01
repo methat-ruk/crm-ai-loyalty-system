@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { ArrowLeft, Gift, Pencil, Trash2, Star, TicketCheck, Users, AlertCircle, RefreshCw, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { toast } from 'sonner'
 import { clsx } from 'clsx'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
@@ -132,32 +133,23 @@ const RedeemPanel = ({ reward, onSuccess }: { reward: RewardDetail; onSuccess: (
   const [customer, setCustomer] = useState<Customer | null>(null)
   const [searchKey, setSearchKey] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
 
   const canRedeem = reward.isActive && !isExpired(reward.expiresAt) && (reward.stock === null || reward.stock > 0)
 
-  const handleSelectCustomer = (c: Customer | null) => {
-    setCustomer(c)
-    setError('')
-    setSuccess('')
-  }
-
   const handleRedeem = async () => {
-    if (!customer) { setError('Please select a customer'); return }
-    setError(''); setSuccess('')
+    if (!customer) { toast.error('Please select a customer'); return }
     setLoading(true)
     try {
       await rewardService.redeem(reward.id, customer.id)
-      setSuccess(`Redeemed "${reward.name}" for ${customer.firstName} ${customer.lastName}`)
+      toast.success(`Redeemed "${reward.name}" for ${customer.firstName} ${customer.lastName}`)
       setCustomer(null)
       setSearchKey((k) => k + 1)
       onSuccess()
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message ?? 'Something went wrong')
+        toast.error(err.response?.data?.message ?? 'Something went wrong')
       } else {
-        setError('Something went wrong')
+        toast.error('Something went wrong')
       }
     } finally {
       setLoading(false)
@@ -178,7 +170,7 @@ const RedeemPanel = ({ reward, onSuccess }: { reward: RewardDetail; onSuccess: (
           </div>
         ) : (
           <>
-            <CustomerSearch value={customer} onSelect={handleSelectCustomer} searchKey={searchKey} />
+            <CustomerSearch value={customer} onSelect={setCustomer} searchKey={searchKey} />
             {customer && (
               <div className="flex items-center justify-between text-xs bg-indigo-50 rounded-lg px-3 py-2">
                 <span className="text-slate-600 dark:text-slate-300">Balance</span>
@@ -192,23 +184,11 @@ const RedeemPanel = ({ reward, onSuccess }: { reward: RewardDetail; onSuccess: (
                 </span>
               </div>
             )}
-            {error && (
-              <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-                <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                {error}
-              </div>
-            )}
-            {success && (
-              <div className="flex items-center gap-2 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
-                <TicketCheck className="w-3.5 h-3.5 shrink-0" />
-                {success}
-              </div>
-            )}
             <div className="flex gap-2">
               {customer && (
                 <Button
                   type="button"
-                  onClick={() => { handleSelectCustomer(null); setSearchKey((k) => k + 1) }}
+                  onClick={() => { setCustomer(null); setSearchKey((k) => k + 1) }}
                   className="cursor-pointer bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300"
                 >
                   Clear
@@ -267,7 +247,6 @@ export default function RewardDetailPage() {
   const [loading, setLoading] = useState(true)
   const [showEdit, setShowEdit] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
-  const [deleteError, setDeleteError] = useState('')
   const [deleting, setDeleting] = useState(false)
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null)
 
@@ -305,15 +284,14 @@ export default function RewardDetailPage() {
 
   const handleDelete = async () => {
     setDeleting(true)
-    setDeleteError('')
     try {
       await rewardService.remove(id)
       router.push('/rewards')
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        setDeleteError(err.response?.data?.message ?? 'Something went wrong')
+        toast.error(err.response?.data?.message ?? 'Something went wrong')
       } else {
-        setDeleteError('Something went wrong')
+        toast.error('Something went wrong')
       }
     } finally {
       setDeleting(false)
@@ -458,7 +436,7 @@ export default function RewardDetailPage() {
                       {new Date(r.createdAt).toLocaleDateString()} {new Date(r.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
-                  <span className="text-xs font-semibold text-indigo-600 tabular-nums shrink-0">
+                  <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-500 tabular-nums shrink-0">
                     {r.pointsUsed.toLocaleString()} pts
                   </span>
                   <span className={clsx('text-xs font-medium px-1.5 py-0.5 rounded-full shrink-0', statusStyles[r.status])}>
@@ -506,9 +484,8 @@ export default function RewardDetailPage() {
           title="Delete Reward"
           description={`Delete "${reward.name}"? This cannot be undone.`}
           onConfirm={handleDelete}
-          onCancel={() => { setShowDelete(false); setDeleteError('') }}
+          onCancel={() => setShowDelete(false)}
           loading={deleting}
-          error={deleteError}
         />
       )}
     </div>

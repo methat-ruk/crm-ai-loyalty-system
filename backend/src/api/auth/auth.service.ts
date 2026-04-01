@@ -38,13 +38,13 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
-    if (!user) throw new UnauthorizedException('Invalid credentials');
+    if (!user) throw new UnauthorizedException('Incorrect email or password.');
 
     // Destructure here — password is used directly in bcrypt.compare below
     const { password, ...safeUser } = user;
 
     const isValid = await bcrypt.compare(dto.password, password);
-    if (!isValid) throw new UnauthorizedException('Invalid credentials');
+    if (!isValid) throw new UnauthorizedException('Incorrect email or password.');
 
     if (!safeUser.isActive)
       throw new UnauthorizedException('Account is inactive');

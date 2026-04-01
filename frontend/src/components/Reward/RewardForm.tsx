@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { X, AlertCircle } from 'lucide-react'
+import { X } from 'lucide-react'
 import { clsx } from 'clsx'
+import { toast } from 'sonner'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -34,7 +35,6 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
   )
   const [loading, setLoading] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
-  const [globalError, setGlobalError] = useState('')
 
   const validate = (): FieldErrors => {
     const errors: FieldErrors = {}
@@ -50,7 +50,6 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setGlobalError('')
     const errors = validate()
     if (Object.keys(errors).length > 0) { setFieldErrors(errors); return }
     setFieldErrors({})
@@ -80,10 +79,10 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
           }
           setFieldErrors(mapped)
         } else {
-          setGlobalError(data?.message ?? 'Something went wrong')
+          toast.error(data?.message ?? 'Something went wrong')
         }
       } else {
-        setGlobalError('Something went wrong')
+        toast.error('Something went wrong')
       }
     } finally {
       setLoading(false)
@@ -171,13 +170,6 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
             />
             {fieldErrors.expiresAt && <p className="text-xs text-red-500">{fieldErrors.expiresAt}</p>}
           </div>
-
-          {globalError && (
-            <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-              {globalError}
-            </div>
-          )}
 
           <div className="flex gap-2 pt-1">
             <Button type="button" onClick={onClose} className="cursor-pointer bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200">

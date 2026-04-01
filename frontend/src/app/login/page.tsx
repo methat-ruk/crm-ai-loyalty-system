@@ -3,9 +3,12 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { z } from 'zod'
+import { toast } from 'sonner'
+import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { ThemeToggle } from '@/components/layout/ThemeToggle'
 import { authService } from '@/services/authService'
 import { useAuthStore } from '@/store/authStore'
 
@@ -23,19 +26,16 @@ export default function LoginPage() {
 
   const [form, setForm] = useState<LoginForm>({ email: '', password: '' })
   const [errors, setErrors] = useState<FormErrors>({})
-  const [serverError, setServerError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setForm((prev) => ({ ...prev, [name]: value }))
     setErrors((prev) => ({ ...prev, [name]: undefined }))
-    setServerError('')
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setServerError('')
 
     const result = loginSchema.safeParse(form)
     if (!result.success) {
@@ -54,9 +54,12 @@ export default function LoginPage() {
       document.cookie = `token=${accessToken}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`
       router.push('/dashboard')
     } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : 'Invalid email or password'
-      setServerError(message)
+      if (axios.isAxiosError(err)) {
+        const msg = err.response?.data?.message ?? 'Invalid email or password'
+        toast.error(Array.isArray(msg) ? msg.join(', ') : msg)
+      } else {
+        toast.error('Invalid email or password')
+      }
     } finally {
       setIsLoading(false)
     }
@@ -64,11 +67,16 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-100 via-slate-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 px-4">
+      {/* Theme toggle */}
+      <div className="fixed top-4 right-4">
+        <ThemeToggle />
+      </div>
+
       <div className="w-full max-w-sm">
 
         {/* Brand */}
         <div className="mb-9 text-center">
-          <div className="inline-flex items-center justify-center w-13 h-13 rounded-2xl bg-linear-to-br from-indigo-500 to-indigo-700 mb-4 shadow-md shadow-indigo-200">
+          <div className="inline-flex items-center justify-center w-13 h-13 rounded-2xl bg-linear-to-br from-indigo-500 to-indigo-700 mb-4 shadow-md shadow-indigo-200 dark:shadow-indigo-900/40">
             <svg
               className="w-6 h-6 text-white"
               fill="none"
@@ -92,14 +100,8 @@ export default function LoginPage() {
         </div>
 
         {/* Card */}
-        <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200/80 dark:border-slate-700 shadow-xl shadow-slate-200/60 dark:shadow-slate-900/60 px-8 py-9">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200/80 dark:border-slate-700 shadow-xl shadow-slate-200/60 dark:shadow-black/30 px-8 py-9">
           <form onSubmit={handleSubmit} noValidate className="space-y-6">
-
-            {serverError && (
-              <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">
-                {serverError}
-              </div>
-            )}
 
             <div className="space-y-2">
               <Label
@@ -148,7 +150,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-10 rounded-xl bg-linear-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white text-sm font-semibold shadow-md shadow-indigo-200 hover:shadow-lg hover:shadow-indigo-200 transition-all duration-200 mt-1 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full h-10 rounded-xl bg-linear-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white text-sm font-semibold shadow-md shadow-indigo-200 dark:shadow-indigo-900/30 hover:shadow-lg hover:shadow-indigo-200 dark:hover:shadow-indigo-900/40 transition-all duration-200 mt-1 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">

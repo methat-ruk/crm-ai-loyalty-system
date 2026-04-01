@@ -31,6 +31,20 @@ export class LoyaltyController {
     return this.loyaltyService.getOverview();
   }
 
+  // GET /loyalty/transactions — global paginated list
+  @Get('transactions')
+  getAllTransactions(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('type') type?: string,
+  ) {
+    return this.loyaltyService.getAllTransactions(
+      Number(page) || 1,
+      Number(limit) || 20,
+      type,
+    );
+  }
+
   // GET /loyalty/:customerId
   @Get(':customerId')
   getAccount(@Param('customerId') customerId: string) {
