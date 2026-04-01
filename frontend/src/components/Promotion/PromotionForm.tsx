@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { X, AlertCircle, ChevronDown } from 'lucide-react'
+import { X, ChevronDown } from 'lucide-react'
 import { clsx } from 'clsx'
+import { toast } from 'sonner'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -51,7 +52,6 @@ export const PromotionForm = ({ campaign, onClose, onSuccess }: PromotionFormPro
   )
   const [loading, setLoading] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
-  const [globalError, setGlobalError] = useState('')
 
   const validate = (): FieldErrors => {
     const errors: FieldErrors = {}
@@ -73,7 +73,6 @@ export const PromotionForm = ({ campaign, onClose, onSuccess }: PromotionFormPro
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setGlobalError('')
     const errs = validate()
     if (Object.keys(errs).length > 0) { setFieldErrors(errs); return }
     setFieldErrors({})
@@ -98,9 +97,9 @@ export const PromotionForm = ({ campaign, onClose, onSuccess }: PromotionFormPro
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         const msg = err.response?.data?.message ?? err.message
-        setGlobalError(Array.isArray(msg) ? msg.join(', ') : msg)
+        toast.error(Array.isArray(msg) ? msg.join(', ') : msg)
       } else {
-        setGlobalError('Something went wrong')
+        toast.error('Something went wrong')
       }
     } finally {
       setLoading(false)
@@ -221,13 +220,6 @@ export const PromotionForm = ({ campaign, onClose, onSuccess }: PromotionFormPro
               {err('endDate') && <p className="text-xs text-red-500">{err('endDate')}</p>}
             </div>
           </div>
-
-          {globalError && (
-            <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg px-3 py-2">
-              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-              {globalError}
-            </div>
-          )}
 
           <div className="flex gap-2 pt-1">
             <Button

@@ -119,6 +119,40 @@ export class LoyaltyService {
     };
   }
 
+  // ── All transactions (global, paginated) ──────────────────────────────────
+
+  async getAllTransactions(page = 1, limit = 20, type?: string) {
+    const where = type
+      ? { type: type as 'EARN' | 'REDEEM' | 'EXPIRE' | 'ADJUST' }
+      : {};
+
+    const [data, total] = await Promise.all([
+      this.prisma.loyaltyTransaction.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          loyaltyAccount: {
+            include: {
+              customer: {
+                select: {
+                  id: true,
+                  firstName: true,
+                  lastName: true,
+                  tier: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+      this.prisma.loyaltyTransaction.count({ where }),
+    ]);
+
+    return { data, total, page, limit, totalPages: Math.ceil(total / limit) };
+  }
+
   // ── Get single account ─────────────────────────────────────────────────────
 
   async getAccount(customerId: string) {

@@ -28,6 +28,12 @@ export interface LoyaltyOverview {
   })[]
 }
 
+export type GlobalTransaction = LoyaltyTransaction & {
+  loyaltyAccount: {
+    customer: { id: string; firstName: string; lastName: string; tier: Tier }
+  }
+}
+
 export interface EarnRedeemPayload {
   customerId: string
   points: number
@@ -62,6 +68,18 @@ export const loyaltyService = {
   ): Promise<PaginatedResponse<LoyaltyTransaction>> => {
     const { data } = await api.get<PaginatedResponse<LoyaltyTransaction>>(
       `/loyalty/${customerId}/transactions`,
+      { params },
+    )
+    return data
+  },
+
+  getAllTransactions: async (params?: {
+    page?: number
+    limit?: number
+    type?: string
+  }): Promise<PaginatedResponse<GlobalTransaction>> => {
+    const { data } = await api.get<PaginatedResponse<GlobalTransaction>>(
+      '/loyalty/transactions',
       { params },
     )
     return data

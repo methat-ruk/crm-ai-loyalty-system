@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import { clsx } from 'clsx'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import axios from 'axios'
@@ -61,7 +62,6 @@ export const CustomerForm = ({ customer, onClose, onSuccess }: CustomerFormProps
   })
   const [loading, setLoading] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
-  const [generalError, setGeneralError] = useState('')
 
   const set = (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }))
@@ -85,7 +85,6 @@ export const CustomerForm = ({ customer, onClose, onSuccess }: CustomerFormProps
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setGeneralError('')
     setLoading(true)
 
     try {
@@ -120,9 +119,9 @@ export const CustomerForm = ({ customer, onClose, onSuccess }: CustomerFormProps
       if (axios.isAxiosError(err)) {
         const data = err.response?.data
         const msg = data?.message ?? err.message
-        setGeneralError(Array.isArray(msg) ? msg.join(', ') : msg)
+        toast.error(Array.isArray(msg) ? msg.join(', ') : msg)
       } else {
-        setGeneralError('Something went wrong')
+        toast.error('Something went wrong')
       }
     } finally {
       setLoading(false)
@@ -179,11 +178,9 @@ export const CustomerForm = ({ customer, onClose, onSuccess }: CustomerFormProps
             <Input type="date" value={form.dateOfBirth} onChange={set('dateOfBirth')} className={inputClass('dateOfBirth')} />
           </Field>
 
-          {generalError && <p className="text-xs text-red-500">{generalError}</p>}
-
           {/* Actions */}
           <div className="flex items-center justify-end gap-2 pt-1">
-            <Button type="button" variant="ghost" onClick={onClose} className="text-slate-500 dark:text-slate-400 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 cursor-pointer">
+            <Button type="button" variant="ghost" onClick={onClose} className="text-slate-500 dark:text-slate-300 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 cursor-pointer">
               Cancel
             </Button>
             <Button
