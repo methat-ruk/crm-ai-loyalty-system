@@ -8,6 +8,7 @@ import { CustomersModule } from './api/customers/customers.module.js';
 import { LoyaltyModule } from './api/loyalty/loyalty.module.js';
 import { RewardsModule } from './api/rewards/rewards.module.js';
 import { AnalyticsModule } from './api/analytics/analytics.module.js';
+import { PromotionsModule } from './api/promotions/promotions.module.js';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AnalyticsModule } from './api/analytics/analytics.module.js';
     LoyaltyModule,
     RewardsModule,
     AnalyticsModule,
+    PromotionsModule,
   ],
   controllers: [AppController],
 })

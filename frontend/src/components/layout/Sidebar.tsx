@@ -7,6 +7,7 @@ import {
   Users,
   Star,
   Gift,
+  Tag,
   BarChart2,
   Sparkles,
 } from 'lucide-react'
@@ -22,6 +23,7 @@ const navItems = [
   { label: 'Customers', href: '/customers', icon: Users },
   { label: 'Loyalty', href: '/loyalty', icon: Star },
   { label: 'Rewards', href: '/rewards', icon: Gift },
+  { label: 'Promotions', href: '/promotions', icon: Tag },
   { label: 'Analytics', href: '/analytics', icon: BarChart2 },
   { label: 'AI Insights', href: '/ai-insights', icon: Sparkles },
 ]

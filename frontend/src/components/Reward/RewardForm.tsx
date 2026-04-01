@@ -111,7 +111,7 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
         <form onSubmit={handleSubmit} className="p-5 space-y-3">
           {/* Name */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Name *</label>
+            <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Name *</label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -123,7 +123,7 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
 
           {/* Description */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Description</label>
+            <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Description</label>
             <Input
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -135,7 +135,7 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
           {/* Points cost + Stock */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Points Cost *</label>
+              <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Points Cost *</label>
               <Input
                 type="number"
                 value={pointsCost}
@@ -147,7 +147,7 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
               {fieldErrors.pointsCost && <p className="text-xs text-red-500">{fieldErrors.pointsCost}</p>}
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Stock <span className="text-slate-400">(blank = unlimited)</span></label>
+              <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Stock <span className="text-slate-600 dark:text-slate-300">(blank = unlimited)</span></label>
               <Input
                 type="number"
                 value={stock}
@@ -162,7 +162,7 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
 
           {/* Expires at */}
           <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-500 dark:text-slate-400">Expires On <span className="text-slate-400">(optional)</span></label>
+            <label className="text-xs font-medium text-slate-600 dark:text-slate-300">Expires On <span className="text-slate-600 dark:text-slate-300">(optional)</span></label>
             <Input
               type="date"
               value={expiresAt}
