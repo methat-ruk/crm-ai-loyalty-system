@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { loyaltyService, type LoyaltyOverview, type GlobalTransaction } from '@/services/loyaltyService'
 import { customerService } from '@/services/customerService'
+import { useRole } from '@/hooks/useRole'
 import type { Customer, TransactionType } from '@/types'
 
 // ─── Tier styles ──────────────────────────────────────────────────────────────
@@ -295,6 +296,7 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function LoyaltyPage() {
+  const { can } = useRole()
   const [overview, setOverview] = useState<LoyaltyOverview | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -407,7 +409,7 @@ export default function LoyaltyPage() {
           </div>
 
           {/* Quick action form */}
-          <QuickAction onSuccess={load} />
+          {can('ADMIN', 'STAFF') && <QuickAction onSuccess={load} />}
         </div>
 
         {/* Right — Transactions (paginated) */}

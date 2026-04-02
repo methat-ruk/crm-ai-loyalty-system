@@ -12,6 +12,7 @@ import { RewardForm } from '@/components/Reward/RewardForm'
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog'
 import { rewardService, type RewardDetail } from '@/services/rewardService'
 import { customerService } from '@/services/customerService'
+import { useRole } from '@/hooks/useRole'
 import type { Customer, RedemptionStatus } from '@/types'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -243,6 +244,7 @@ const PageControls = ({
 export default function RewardDetailPage() {
   const { id } = useParams<{ id: string }>()
   const router = useRouter()
+  const { can } = useRole()
   const [reward, setReward] = useState<RewardDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [showEdit, setShowEdit] = useState(false)
@@ -332,34 +334,36 @@ export default function RewardDetailPage() {
           <ArrowLeft className="w-4 h-4" />
           Back
         </button>
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={() => rewardService.update(id, { isActive: !reward.isActive }).then(load)}
-            className={clsx(
-              'cursor-pointer',
-              reward.isActive
-                ? 'bg-amber-500 hover:bg-amber-600 text-white'
-                : 'bg-emerald-600 hover:bg-emerald-700 text-white',
-            )}
-          >
-            {reward.isActive ? 'Deactivate' : 'Activate'}
-          </Button>
-          <div className="w-px h-6 bg-slate-200 dark:bg-slate-700" />
-          <Button
-            onClick={() => setShowEdit(true)}
-            className="gap-1.5 cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white"
-          >
-            <Pencil className="w-4 h-4" />
-            Edit
-          </Button>
-          <Button
-            onClick={() => setShowDelete(true)}
-            className="gap-1.5 cursor-pointer bg-red-600 hover:bg-red-700 text-white"
-          >
-            <Trash2 className="w-4 h-4" />
-            Delete
-          </Button>
-        </div>
+        {can('ADMIN', 'STAFF') && (
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => rewardService.update(id, { isActive: !reward.isActive }).then(load)}
+              className={clsx(
+                'cursor-pointer',
+                reward.isActive
+                  ? 'bg-amber-500 hover:bg-amber-600 text-white'
+                  : 'bg-emerald-600 hover:bg-emerald-700 text-white',
+              )}
+            >
+              {reward.isActive ? 'Deactivate' : 'Activate'}
+            </Button>
+            <div className="w-px h-6 bg-slate-200 dark:bg-slate-700" />
+            <Button
+              onClick={() => setShowEdit(true)}
+              className="gap-1.5 cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white"
+            >
+              <Pencil className="w-4 h-4" />
+              Edit
+            </Button>
+            <Button
+              onClick={() => setShowDelete(true)}
+              className="gap-1.5 cursor-pointer bg-red-600 hover:bg-red-700 text-white"
+            >
+              <Trash2 className="w-4 h-4" />
+              Delete
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Reward card */}
@@ -442,7 +446,7 @@ export default function RewardDetailPage() {
                   <span className={clsx('text-xs font-medium px-1.5 py-0.5 rounded-full shrink-0', statusStyles[r.status])}>
                     {r.status}
                   </span>
-                  {r.status === 'PENDING' && (
+                  {r.status === 'PENDING' && can('ADMIN', 'STAFF') && (
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         onClick={() => handleStatusUpdate(r.id, 'COMPLETED')}
@@ -468,7 +472,7 @@ export default function RewardDetailPage() {
         </div>
 
         {/* Redeem panel */}
-        <RedeemPanel reward={reward} onSuccess={load} />
+        {can('ADMIN', 'STAFF') && <RedeemPanel reward={reward} onSuccess={load} />}
       </div>
 
       {showEdit && (

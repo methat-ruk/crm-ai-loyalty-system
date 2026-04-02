@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { RewardForm } from '@/components/Reward/RewardForm'
 import { rewardService, type RewardWithCount } from '@/services/rewardService'
+import { useRole } from '@/hooks/useRole'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -19,6 +20,7 @@ const isLowStock = (stock: number | null) => stock !== null && stock <= 5
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function RewardsPage() {
+  const { can } = useRole()
   const [rewards, setRewards] = useState<RewardWithCount[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -67,13 +69,15 @@ export default function RewardsPage() {
           <h1 className="text-xl font-semibold text-slate-800 dark:text-slate-100">Rewards</h1>
           <p className="text-sm text-slate-400 dark:text-slate-500 mt-0.5">Manage reward catalog and redemptions</p>
         </div>
-        <Button
-          onClick={() => setShowForm(true)}
-          className="gap-1.5 cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white"
-        >
-          <Plus className="w-4 h-4" />
-          Add Reward
-        </Button>
+        {can('ADMIN', 'STAFF') && (
+          <Button
+            onClick={() => setShowForm(true)}
+            className="gap-1.5 cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white"
+          >
+            <Plus className="w-4 h-4" />
+            Add Reward
+          </Button>
+        )}
       </div>
 
       {/* Stats */}

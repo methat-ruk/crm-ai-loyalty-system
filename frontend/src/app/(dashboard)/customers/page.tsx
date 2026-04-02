@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { CustomerForm } from '@/components/Customer/CustomerForm'
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog'
 import { customerService } from '@/services/customerService'
+import { useRole } from '@/hooks/useRole'
 import type { Customer, Tier } from '@/types'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -33,6 +34,7 @@ const tierActive: Record<Tier, string> = {
 
 export default function CustomersPage() {
   const router = useRouter()
+  const { can } = useRole()
   const [customers, setCustomers] = useState<Customer[]>([])
   const [total, setTotal] = useState(0)
   const [totalPages, setTotalPages] = useState(1)
@@ -151,13 +153,15 @@ export default function CustomersPage() {
             {total.toLocaleString()} customer{total !== 1 ? 's' : ''} total
           </p>
         </div>
-        <Button
-          onClick={openCreate}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer gap-1.5"
-        >
-          <Plus className="w-4 h-4" />
-          Add Customer
-        </Button>
+        {can('ADMIN', 'STAFF') && (
+          <Button
+            onClick={openCreate}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer gap-1.5"
+          >
+            <Plus className="w-4 h-4" />
+            Add Customer
+          </Button>
+        )}
       </div>
 
       {/* Search + Filters */}
@@ -316,20 +320,22 @@ export default function CustomersPage() {
                       </span>
                     </td>
                     <td className="px-5 py-3.5 text-right" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center justify-end gap-3">
-                        <button
-                          onClick={() => openEdit(c)}
-                          className="text-xs text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium transition-colors cursor-pointer"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => setDeleteTarget(c)}
-                          className="text-xs text-red-500 hover:text-red-700 font-medium transition-colors cursor-pointer"
-                        >
-                          Delete
-                        </button>
-                      </div>
+                      {can('ADMIN', 'STAFF') && (
+                        <div className="flex items-center justify-end gap-3">
+                          <button
+                            onClick={() => openEdit(c)}
+                            className="text-xs text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium transition-colors cursor-pointer"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => setDeleteTarget(c)}
+                            className="text-xs text-red-500 hover:text-red-700 font-medium transition-colors cursor-pointer"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))

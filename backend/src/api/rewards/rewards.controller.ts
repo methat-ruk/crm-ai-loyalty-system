@@ -26,6 +26,9 @@ import {
 } from './dto/redeem-reward.dto.js';
 import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe.js';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
+import { RolesGuard } from '../../common/guards/roles.guard.js';
+import { Roles } from '../../common/decorators/roles.decorator.js';
+import { Role } from '../../../generated/prisma/index.js';
 import { z } from 'zod';
 
 const updateStatusSchema = z.object({
@@ -33,7 +36,7 @@ const updateStatusSchema = z.object({
 });
 
 @Controller('rewards')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class RewardsController {
   constructor(private rewardsService: RewardsService) {}
 
@@ -60,6 +63,7 @@ export class RewardsController {
   }
 
   @Post()
+  @Roles(Role.ADMIN, Role.STAFF)
   create(
     @Body(new ZodValidationPipe(createRewardSchema)) dto: CreateRewardDto,
   ) {
@@ -67,6 +71,7 @@ export class RewardsController {
   }
 
   @Patch(':id')
+  @Roles(Role.ADMIN, Role.STAFF)
   update(
     @Param('id') id: string,
     @Body(new ZodValidationPipe(updateRewardSchema)) dto: UpdateRewardDto,
@@ -75,6 +80,7 @@ export class RewardsController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN, Role.STAFF)
   @HttpCode(HttpStatus.OK)
   remove(@Param('id') id: string) {
     return this.rewardsService.remove(id);
@@ -94,6 +100,7 @@ export class RewardsController {
   }
 
   @Post(':id/redeem')
+  @Roles(Role.ADMIN, Role.STAFF)
   redeemReward(
     @Param('id') id: string,
     @Body(new ZodValidationPipe(redeemRewardSchema)) dto: RedeemRewardDto,
@@ -102,6 +109,7 @@ export class RewardsController {
   }
 
   @Patch('redemptions/:redemptionId/status')
+  @Roles(Role.ADMIN, Role.STAFF)
   updateRedemptionStatus(
     @Param('redemptionId') redemptionId: string,
     @Body(new ZodValidationPipe(updateStatusSchema))
