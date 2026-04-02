@@ -18,8 +18,7 @@ export class AiService {
     const apiKey = this.config.get<string>('AI_API_KEY') ?? '';
 
     if (this.provider === 'openai') {
-      this.model =
-        this.config.get<string>('AI_MODEL') ?? 'gpt-4o-mini';
+      this.model = this.config.get<string>('AI_MODEL') ?? 'gpt-4o-mini';
       this.openai = new OpenAI({ apiKey });
     } else if (this.provider === 'groq') {
       this.model =
@@ -50,7 +49,9 @@ export class AiService {
       temperature: 0.7,
     });
 
-    return response.choices[0]?.message?.content ?? 'ไม่สามารถสร้าง insight ได้';
+    return (
+      response.choices[0]?.message?.content ?? 'ไม่สามารถสร้าง insight ได้'
+    );
   }
 
   private getMockResponse(prompt: string): string {
