@@ -42,7 +42,10 @@ const TierProgress = ({ tier, lifetimePoints }: { tier: Tier; lifetimePoints: nu
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-        <span>{needed.toLocaleString()} pts to <span className={clsx('font-medium', tierStyles[next])}>{next}</span></span>
+        <span className="flex items-center gap-1">
+            <span>{needed.toLocaleString()} pts to</span>
+            <span className={clsx('px-1.5 py-0.5 rounded-full text-[10px] font-semibold', tierStyles[next])}>{next}</span>
+          </span>
         <span className="tabular-nums">{pct}%</span>
       </div>
       <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
@@ -282,7 +285,7 @@ export default function CustomerDetailPage() {
           <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">{customer.email}</p>
           {customer.phone && <p className="text-sm text-slate-500 dark:text-slate-400">{customer.phone}</p>}
           {customer.dateOfBirth && (
-            <p className="text-sm text-slate-400 dark:text-slate-500">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               DOB: {new Date(customer.dateOfBirth).toLocaleDateString()}
             </p>
           )}

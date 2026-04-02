@@ -23,9 +23,12 @@ import {
 } from './dto/update-customer.dto.js';
 import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe.js';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
+import { RolesGuard } from '../../common/guards/roles.guard.js';
+import { Roles } from '../../common/decorators/roles.decorator.js';
+import { Role } from '../../../generated/prisma/index.js';
 
 @Controller('customers')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class CustomersController {
   constructor(private customersService: CustomersService) {}
 
@@ -97,12 +100,14 @@ export class CustomersController {
   }
 
   @Post()
+  @Roles(Role.ADMIN, Role.STAFF)
   @UsePipes(new ZodValidationPipe(createCustomerSchema))
   create(@Body() dto: CreateCustomerDto) {
     return this.customersService.create(dto);
   }
 
   @Patch(':id')
+  @Roles(Role.ADMIN, Role.STAFF)
   update(
     @Param('id') id: string,
     @Body(new ZodValidationPipe(updateCustomerSchema)) dto: UpdateCustomerDto,
@@ -111,6 +116,7 @@ export class CustomersController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN, Role.STAFF)
   @HttpCode(HttpStatus.OK)
   remove(@Param('id') id: string) {
     return this.customersService.remove(id);

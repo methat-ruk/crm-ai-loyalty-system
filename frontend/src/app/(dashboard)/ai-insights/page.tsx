@@ -430,11 +430,11 @@ export default function AiInsightsPage() {
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2">
+                      <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2">
                         {item.content.replace(/\*\*/g, '')}
                       </p>
                     </div>
-                    <p className="text-xs text-slate-400 dark:text-slate-500 shrink-0 whitespace-nowrap">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 shrink-0 whitespace-nowrap">
                       {formatDate(item.createdAt)}
                     </p>
                   </div>

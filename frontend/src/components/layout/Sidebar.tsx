@@ -26,6 +26,7 @@ const navItems = [
   { label: 'AI Insights', href: '/ai-insights', icon: Sparkles },
 ]
 
+
 export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const pathname = usePathname()
 
@@ -84,7 +85,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
       {/* Footer */}
       <div className="px-4 py-4 border-t border-slate-700/60 shrink-0">
-        <p className="text-xs text-slate-500 text-center">v1.0.0</p>
+        <p className="text-xs text-slate-600 text-center">v1.0.0</p>
       </div>
     </aside>
   )

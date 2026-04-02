@@ -19,9 +19,12 @@ import {
 } from './dto/adjust-points.dto.js';
 import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe.js';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
+import { RolesGuard } from '../../common/guards/roles.guard.js';
+import { Roles } from '../../common/decorators/roles.decorator.js';
+import { Role } from '../../../generated/prisma/index.js';
 
 @Controller('loyalty')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class LoyaltyController {
   constructor(private loyaltyService: LoyaltyService) {}
 
@@ -69,12 +72,14 @@ export class LoyaltyController {
 
   // POST /loyalty/earn
   @Post('earn')
+  @Roles(Role.ADMIN, Role.STAFF)
   earn(@Body(new ZodValidationPipe(earnPointsSchema)) dto: EarnPointsDto) {
     return this.loyaltyService.earn(dto);
   }
 
   // POST /loyalty/redeem
   @Post('redeem')
+  @Roles(Role.ADMIN, Role.STAFF)
   redeem(
     @Body(new ZodValidationPipe(redeemPointsSchema)) dto: RedeemPointsDto,
   ) {
@@ -83,6 +88,7 @@ export class LoyaltyController {
 
   // POST /loyalty/adjust
   @Post('adjust')
+  @Roles(Role.ADMIN, Role.STAFF)
   adjust(
     @Body(new ZodValidationPipe(adjustPointsSchema)) dto: AdjustPointsDto,
   ) {
