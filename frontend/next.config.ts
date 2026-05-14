@@ -7,6 +7,12 @@ const srcDir = path.join(configDir, "src");
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  webpack: (config) => {
+    config.resolve ??= {};
+    config.resolve.alias ??= {};
+    config.resolve.alias["@"] = srcDir;
+    return config;
+  },
   turbopack: {
     resolveAlias: {
       "@": srcDir,
