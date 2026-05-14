@@ -234,7 +234,7 @@ export const PromotionForm = ({ campaign, onClose, onSuccess }: PromotionFormPro
               disabled={loading}
               className="flex-1 cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white"
             >
-              {loading ? 'Saving…' : isEdit ? 'Save Changes' : 'Add Campaign'}
+              {loading ? 'Savingâ€¦' : isEdit ? 'Save Changes' : 'Add Campaign'}
             </Button>
           </div>
         </form>

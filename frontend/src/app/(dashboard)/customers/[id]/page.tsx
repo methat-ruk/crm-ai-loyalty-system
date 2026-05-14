@@ -12,7 +12,7 @@ import { customerService, type CustomerDetail } from '@/services/customerService
 import { loyaltyService } from '@/services/loyaltyService'
 import type { Tier } from '@/types'
 
-// ─── Tier badge ───────────────────────────────────────────────────────────────
+// â”€â”€â”€ Tier badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const tierStyles: Record<Tier, string> = {
   PLATINUM: 'bg-violet-100 text-violet-700',
@@ -32,7 +32,7 @@ const TIER_BAR_COLOR: Record<Tier, string> = {
 const TierProgress = ({ tier, lifetimePoints }: { tier: Tier; lifetimePoints: number }) => {
   const idx = TIER_ORDER.indexOf(tier)
   if (idx === TIER_ORDER.length - 1) {
-    return <p className="text-xs text-violet-600 dark:text-violet-500 font-medium text-center">✦ Max tier reached</p>
+    return <p className="text-xs text-violet-600 dark:text-violet-500 font-medium text-center">âœ¦ Max tier reached</p>
   }
   const next = TIER_ORDER[idx + 1]
   const from = TIER_THRESHOLDS[tier]
@@ -55,7 +55,7 @@ const TierProgress = ({ tier, lifetimePoints }: { tier: Tier; lifetimePoints: nu
   )
 }
 
-// ─── Section card ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Section card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
@@ -70,9 +70,9 @@ const EmptyRow = ({ label }: { label: string }) => (
   <div className="px-5 py-6 text-center text-sm text-slate-400 dark:text-slate-500">{label}</div>
 )
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-// ─── Pagination controls ──────────────────────────────────────────────────────
+// â”€â”€â”€ Pagination controls â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const PageControls = ({
   page, totalPages, loading, onChange,
@@ -103,7 +103,7 @@ const PageControls = ({
   )
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function CustomerDetailPage() {
   const { id } = useParams<{ id: string }>()

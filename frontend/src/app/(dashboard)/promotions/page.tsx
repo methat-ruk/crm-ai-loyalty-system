@@ -11,7 +11,7 @@ import { PromotionForm } from '@/components/Promotion/PromotionForm'
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog'
 import type { CampaignType } from '@/types'
 
-// ─── Constants ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const TYPE_META: Record<CampaignType, { label: string; icon: React.ElementType; color: string; bg: string }> = {
   POINTS_MULTIPLIER: { label: 'Points Multiplier', icon: Zap,     color: 'text-amber-600',   bg: 'bg-amber-50' },
@@ -38,7 +38,7 @@ const FILTER_TYPES: { value: string; label: string }[] = [
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString('en', { day: 'numeric', month: 'short', year: 'numeric' })
 
-// ─── Status badge ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Status badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const StatusBadge = ({ c }: { c: CampaignWithExpiry }) => {
   if (c.isExpired)  return <span className="text-xs font-medium px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500">Expired</span>
@@ -46,7 +46,7 @@ const StatusBadge = ({ c }: { c: CampaignWithExpiry }) => {
   return <span className="text-xs font-medium px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700">Active</span>
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function PromotionsPage() {
   const { can } = useRole()
@@ -184,7 +184,7 @@ export default function PromotionsPage() {
         <div className="relative flex-1 min-w-48">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
           <Input
-            placeholder="Search campaigns…"
+            placeholder="Search campaignsâ€¦"
             value={search}
             onChange={handleSearchChange}
             className="pl-8 text-sm"
@@ -269,7 +269,7 @@ export default function PromotionsPage() {
                 {/* Date range */}
                 <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
                   <Calendar className="w-3.5 h-3.5 shrink-0" />
-                  {formatDate(c.startDate)} — {formatDate(c.endDate)}
+                  {formatDate(c.startDate)} â€” {formatDate(c.endDate)}
                 </div>
 
                 {/* Actions */}

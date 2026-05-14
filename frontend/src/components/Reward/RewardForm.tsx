@@ -180,7 +180,7 @@ export const RewardForm = ({ reward, onClose, onSuccess }: RewardFormProps) => {
               disabled={loading}
               className="flex-1 cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white"
             >
-              {loading ? 'Saving…' : isEdit ? 'Save Changes' : 'Add Reward'}
+              {loading ? 'Savingâ€¦' : isEdit ? 'Save Changes' : 'Add Reward'}
             </Button>
           </div>
         </form>

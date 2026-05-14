@@ -48,7 +48,7 @@ export const ConfirmDialog = ({
           disabled={loading}
           className={`${confirmClass} cursor-pointer`}
         >
-          {loading ? 'Deleting…' : confirmLabel}
+          {loading ? 'Deletingâ€¦' : confirmLabel}
         </Button>
       </div>
     </div>

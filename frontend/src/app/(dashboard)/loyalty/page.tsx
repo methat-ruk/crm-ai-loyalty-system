@@ -12,7 +12,7 @@ import { customerService } from '@/services/customerService'
 import { useRole } from '@/hooks/useRole'
 import type { Customer, TransactionType } from '@/types'
 
-// ─── Tier styles ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Tier styles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const tierStyles = {
   PLATINUM: { bg: 'bg-violet-50', border: 'border-violet-200', text: 'text-violet-700', badge: 'bg-violet-100 text-violet-700' },
@@ -28,7 +28,7 @@ const txTypeStyles: Record<TransactionType, string> = {
   ADJUST: 'bg-indigo-100 text-indigo-700',
 }
 
-// ─── Customer search ──────────────────────────────────────────────────────────
+// â”€â”€â”€ Customer search â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const CustomerSearch = ({
   value,
@@ -82,7 +82,7 @@ const CustomerSearch = ({
   return (
     <div ref={containerRef} className="relative">
       <Input
-        placeholder="Search customer name or email…"
+        placeholder="Search customer name or emailâ€¦"
         value={value ? `${value.firstName} ${value.lastName}` : query}
         onChange={handleChange}
         onFocus={() => { if (results.length) setOpen(true) }}
@@ -117,7 +117,7 @@ const CustomerSearch = ({
   )
 }
 
-// ─── Quick action form ────────────────────────────────────────────────────────
+// â”€â”€â”€ Quick action form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type ActionTab = 'earn' | 'redeem'
 
@@ -174,7 +174,7 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
         }
       })
       if (tab === 'earn' && result.tierChanged) {
-        toast.success(`${result.message} · Tier upgraded to ${result.tier}!`)
+        toast.success(`${result.message} Â· Tier upgraded to ${result.tier}!`)
       } else {
         toast.success(result.message)
       }
@@ -213,7 +213,7 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
               tab === 'redeem' ? 'bg-red-500 text-white' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50',
             )}
           >
-            − Redeem
+            âˆ’ Redeem
           </button>
         </div>
       </div>
@@ -293,7 +293,7 @@ const QuickAction = ({ onSuccess }: { onSuccess: () => void }) => {
   )
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function LoyaltyPage() {
   const { can } = useRole()
@@ -372,7 +372,7 @@ export default function LoyaltyPage() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {/* Left — Tier breakdown + Quick action */}
+        {/* Left â€” Tier breakdown + Quick action */}
         <div className="space-y-5">
           {/* Tier distribution */}
           <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
@@ -389,7 +389,7 @@ export default function LoyaltyPage() {
                       <span className={clsx('text-xs font-medium px-2 py-0.5 rounded-full', tierStyles[tier].badge)}>
                         {tier}
                       </span>
-                      <span className="text-xs text-slate-500 dark:text-slate-300 tabular-nums">{count.toLocaleString()} · {pct}%</span>
+                      <span className="text-xs text-slate-500 dark:text-slate-300 tabular-nums">{count.toLocaleString()} Â· {pct}%</span>
                     </div>
                     <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                       <div
@@ -412,7 +412,7 @@ export default function LoyaltyPage() {
           {can('ADMIN', 'STAFF') && <QuickAction onSuccess={load} />}
         </div>
 
-        {/* Right — Transactions (paginated) */}
+        {/* Right â€” Transactions (paginated) */}
         <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Transactions</h2>
@@ -447,7 +447,7 @@ export default function LoyaltyPage() {
                     </span>
                     <span className={clsx('text-sm font-semibold tabular-nums shrink-0 w-16 text-right',
                       isPositive ? 'text-emerald-600' : 'text-red-500')}>
-                      {isPositive ? '+' : '−'}{tx.points.toLocaleString()}
+                      {isPositive ? '+' : 'âˆ’'}{tx.points.toLocaleString()}
                     </span>
                     <span className="text-xs text-slate-600 dark:text-slate-300 shrink-0 hidden sm:block">
                       {new Date(tx.createdAt).toLocaleDateString()} {new Date(tx.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
