@@ -20,8 +20,14 @@ try {
   }
 }
 
-// 2. Copy generated/ → dist/generated/
+// 2. Copy generated/ to dist/generated/
 try {
+  if (!fs.existsSync(srcGenerated)) {
+    throw new Error(
+      `Missing ${srcGenerated}. Run "npm run prisma:generate" before build/start.`,
+    );
+  }
+
   fs.mkdirSync(distGenerated, { recursive: true });
   fs.cpSync(srcGenerated, distGenerated, { recursive: true, force: true });
 } catch (err) {
