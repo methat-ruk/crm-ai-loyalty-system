@@ -4,7 +4,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service.js';
-import { Tier } from '../../../generated/prisma/index.js';
+import { Tier } from '@prisma/client';
 import type { EarnPointsDto } from './dto/earn-points.dto.js';
 import type { RedeemPointsDto } from './dto/redeem-points.dto.js';
 import type { AdjustPointsDto } from './dto/adjust-points.dto.js';

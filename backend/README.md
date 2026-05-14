@@ -77,7 +77,7 @@ npm run test:e2e
 `npm run start:prod` is configured to run the built server output from:
 
 ```text
-dist/src/main.js
+dist/main.js
 ```
 
 This matches the actual Nest build output in this project.
