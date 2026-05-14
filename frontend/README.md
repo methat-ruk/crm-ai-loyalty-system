@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend
 
-## Getting Started
+Next.js frontend for the CRM AI Loyalty demo application.
 
-First, run the development server:
+## Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Shadcn UI
+- Zustand
+- Recharts
+
+## Purpose
+
+This app provides the operator-facing UI for:
+
+- Login and session handling
+- Dashboard and analytics
+- Customer management
+- Loyalty points operations
+- Rewards catalog and redemptions
+- Promotions management
+- AI insights in mock or real provider mode
+
+## Local Setup
+
+```bash
+npm install
+cp .env.example .env.local
+```
+
+Set the API URL in `.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:4000/api
+```
+
+Start the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+```
 
-## Learn More
+## Demo Notes
 
-To learn more about Next.js, take a look at the following resources:
+- Unauthenticated users are redirected to `/login`.
+- API `401` responses clear the local session and redirect back to login.
+- Promotions UI follows backend role rules:
+  - `ADMIN` and `MARKETING` can manage campaigns
+  - `STAFF` can view campaigns but cannot create or edit them
+- The app no longer depends on fetching Google Fonts during production build.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Main Routes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `/login`
+- `/dashboard`
+- `/customers`
+- `/loyalty`
+- `/rewards`
+- `/promotions`
+- `/ai-insights`
 
-## Deploy on Vercel
+## Build Status
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The frontend has been verified with:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run lint
+npm run build
+```
+
+## Related Docs
+
+- Root overview: [`../README.md`](../README.md)
+- Backend API/service setup: [`../backend/README.md`](../backend/README.md)

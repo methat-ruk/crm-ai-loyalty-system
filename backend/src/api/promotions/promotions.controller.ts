@@ -23,6 +23,9 @@ import {
 import { PromotionsService } from './promotions.service.js';
 import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe.js';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
+import { RolesGuard } from '../../common/guards/roles.guard.js';
+import { Roles } from '../../common/decorators/roles.decorator.js';
+import { Role } from '../../../generated/prisma/index.js';
 import {
   createCampaignSchema,
   type CreateCampaignDto,
@@ -35,7 +38,7 @@ import {
 @ApiTags('Promotions')
 @ApiBearerAuth('access-token')
 @Controller('promotions')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class PromotionsController {
   constructor(private promotionsService: PromotionsService) {}
 
@@ -79,7 +82,8 @@ export class PromotionsController {
   }
 
   @Post()
-  @ApiOperation({ summary: 'Create a new campaign' })
+  @Roles(Role.ADMIN, Role.MARKETING)
+  @ApiOperation({ summary: 'Create a new campaign (ADMIN, MARKETING)' })
   @ApiBody({
     schema: {
       type: 'object',
@@ -113,6 +117,7 @@ export class PromotionsController {
     },
   })
   @ApiResponse({ status: 201, description: 'Campaign created' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   create(
     @Body(new ZodValidationPipe(createCampaignSchema)) dto: CreateCampaignDto,
   ) {
@@ -120,7 +125,8 @@ export class PromotionsController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Update a campaign' })
+  @Roles(Role.ADMIN, Role.MARKETING)
+  @ApiOperation({ summary: 'Update a campaign (ADMIN, MARKETING)' })
   @ApiParam({ name: 'id' })
   @ApiBody({
     schema: {
@@ -146,6 +152,7 @@ export class PromotionsController {
     },
   })
   @ApiResponse({ status: 200, description: 'Campaign updated' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Campaign not found' })
   update(
     @Param('id') id: string,
@@ -155,18 +162,24 @@ export class PromotionsController {
   }
 
   @Patch(':id/toggle')
-  @ApiOperation({ summary: 'Toggle campaign active/inactive status' })
+  @Roles(Role.ADMIN, Role.MARKETING)
+  @ApiOperation({
+    summary: 'Toggle campaign active/inactive status (ADMIN, MARKETING)',
+  })
   @ApiParam({ name: 'id' })
   @ApiResponse({ status: 200, description: 'Campaign status toggled' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   toggle(@Param('id') id: string) {
     return this.promotionsService.toggle(id);
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN, Role.MARKETING)
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Delete a campaign' })
+  @ApiOperation({ summary: 'Delete a campaign (ADMIN, MARKETING)' })
   @ApiParam({ name: 'id' })
   @ApiResponse({ status: 200, description: 'Campaign deleted' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Campaign not found' })
   remove(@Param('id') id: string) {
     return this.promotionsService.remove(id);
