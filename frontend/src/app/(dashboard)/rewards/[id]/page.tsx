@@ -15,7 +15,7 @@ import { customerService } from '@/services/customerService'
 import { useRole } from '@/hooks/useRole'
 import type { Customer, RedemptionStatus } from '@/types'
 
-// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Helpers
 
 const isExpired = (expiresAt: string | null) =>
   expiresAt ? new Date(expiresAt) < new Date() : false
@@ -26,7 +26,7 @@ const statusStyles: Record<RedemptionStatus, string> = {
   CANCELLED: 'bg-red-100 text-red-600',
 }
 
-// â”€â”€â”€ Customer search (same pattern as loyalty page) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Customer search
 
 const CustomerSearch = ({
   value,
@@ -84,7 +84,7 @@ const CustomerSearch = ({
   return (
     <div ref={containerRef} className="relative">
       <Input
-        placeholder="Search customerâ€¦"
+        placeholder="Search customer..."
         value={display}
         onChange={handleChange}
         onFocus={() => { if (results.length) setOpen(true) }}
@@ -128,7 +128,7 @@ const CustomerSearch = ({
   )
 }
 
-// â”€â”€â”€ Redeem panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Redeem panel
 
 const RedeemPanel = ({ reward, onSuccess }: { reward: RewardDetail; onSuccess: () => void }) => {
   const [customer, setCustomer] = useState<Customer | null>(null)
@@ -212,9 +212,9 @@ const RedeemPanel = ({ reward, onSuccess }: { reward: RewardDetail; onSuccess: (
   )
 }
 
-// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Page
 
-// â”€â”€â”€ Pagination controls â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Pagination controls
 
 const PageControls = ({
   page, totalPages, loading, onChange,
@@ -239,7 +239,7 @@ const PageControls = ({
   )
 }
 
-// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Page
 
 export default function RewardDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -398,7 +398,7 @@ export default function RewardDetailPage() {
           </div>
           <div className="text-center">
             <p className="text-2xl font-bold text-slate-700 dark:text-slate-200 tabular-nums">
-              {reward.stock !== null ? reward.stock.toLocaleString() : 'âˆž'}
+              {reward.stock !== null ? reward.stock.toLocaleString() : 'Unlimited'}
             </p>
             <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Stock</p>
           </div>

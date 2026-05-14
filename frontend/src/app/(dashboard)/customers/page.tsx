@@ -12,7 +12,7 @@ import { customerService } from '@/services/customerService'
 import { useRole } from '@/hooks/useRole'
 import type { Customer, Tier } from '@/types'
 
-// â”€â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Constants
 
 const TIERS: Tier[] = ['BRONZE', 'SILVER', 'GOLD', 'PLATINUM']
 
@@ -30,7 +30,7 @@ const tierActive: Record<Tier, string> = {
   BRONZE: 'bg-orange-500 text-white',
 }
 
-// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Page
 
 export default function CustomersPage() {
   const router = useRouter()
@@ -92,7 +92,7 @@ export default function CustomersPage() {
 
   useEffect(() => { load() }, [load])
 
-  // debounce search â†’ query
+  // debounce search -> query
   useEffect(() => {
     const t = setTimeout(() => { setQuery(search); setPage(1) }, 400)
     return () => clearTimeout(t)
@@ -171,7 +171,7 @@ export default function CustomersPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500 pointer-events-none" />
           <Input
             className="pl-9"
-            placeholder="Search name, email, phoneâ€¦"
+            placeholder="Search name, email, phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -230,7 +230,7 @@ export default function CustomersPage() {
                 onChange={(e) => setPointsMin(e.target.value)}
                 className="flex-1 sm:w-28 sm:flex-none text-xs"
               />
-              <span className="text-slate-400 dark:text-slate-500 text-xs shrink-0">â€“</span>
+              <span className="text-slate-400 dark:text-slate-500 text-xs shrink-0">-</span>
               <Input
                 type="number"
                 placeholder="Max"
@@ -242,7 +242,7 @@ export default function CustomersPage() {
           </div>
         </div>
 
-        {/* Reset â€” full-width row below filters */}
+        {/* Reset - full-width row below filters */}
         {hasFilter && (
           <button
             onClick={resetFilters}
@@ -302,14 +302,14 @@ export default function CustomersPage() {
                       </div>
                     </td>
                     <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400 hidden sm:table-cell">{c.email}</td>
-                    <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400 hidden md:table-cell">{c.phone ?? 'â€”'}</td>
+                    <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400 hidden md:table-cell">{c.phone ?? '-'}</td>
                     <td className="px-5 py-3.5">
                       <span className={clsx('text-xs font-medium px-2 py-0.5 rounded-full', tierStyles[c.tier])}>
                         {c.tier}
                       </span>
                     </td>
                     <td className="px-5 py-3.5 text-slate-700 dark:text-slate-200 tabular-nums hidden sm:table-cell">
-                      {c.loyaltyAccount?.totalPoints.toLocaleString() ?? 'â€”'}
+                      {c.loyaltyAccount?.totalPoints.toLocaleString() ?? '-'}
                     </td>
                     <td className="px-5 py-3.5">
                       <span className={clsx(

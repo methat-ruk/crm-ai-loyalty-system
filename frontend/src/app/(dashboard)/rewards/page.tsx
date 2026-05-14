@@ -10,14 +10,14 @@ import { RewardForm } from '@/components/Reward/RewardForm'
 import { rewardService, type RewardWithCount } from '@/services/rewardService'
 import { useRole } from '@/hooks/useRole'
 
-// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Helpers
 
 const isExpired = (expiresAt: string | null) =>
   expiresAt ? new Date(expiresAt) < new Date() : false
 
 const isLowStock = (stock: number | null) => stock !== null && stock <= 5
 
-// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Page
 
 export default function RewardsPage() {
   const { can } = useRole()
@@ -105,7 +105,7 @@ export default function RewardsPage() {
         <div className="relative flex-1 min-w-48">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
           <Input
-            placeholder="Search rewardsâ€¦"
+            placeholder="Search rewards..."
             value={search}
             onChange={handleSearchChange}
             className="pl-8 text-sm"
@@ -200,7 +200,7 @@ export default function RewardsPage() {
                     ) : (
                       <span className="text-slate-500 dark:text-slate-400">Unlimited</span>
                     )}
-                    <span className="text-slate-500 dark:text-slate-400">Â·</span>
+                    <span className="text-slate-500 dark:text-slate-400">-</span>
                     <span className="text-slate-500 dark:text-slate-400">{reward._count.redemptions} redeemed</span>
                   </div>
                 </div>

@@ -10,7 +10,7 @@ import aiService from '@/services/aiService'
 import { customerService } from '@/services/customerService'
 import type { AIInsight, Customer, InsightType, Tier } from '@/types'
 
-// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Helpers
 
 const TIER_COLOR: Record<Tier, string> = {
   BRONZE:   'bg-orange-100 text-orange-700',
@@ -51,7 +51,7 @@ type HistoryInsight = AIInsight & {
   customer: { id: string; firstName: string; lastName: string; tier: Tier } | null
 }
 
-// â”€â”€â”€ Content renderer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Content renderer
 
 const InsightContent = ({ content }: { content: string }) => (
   <div className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed">
@@ -64,7 +64,7 @@ const InsightContent = ({ content }: { content: string }) => (
   </div>
 )
 
-// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Page
 
 export default function AiInsightsPage() {
   const [provider, setProvider] = useState<{ provider: string; model: string } | null>(null)
@@ -227,7 +227,7 @@ export default function AiInsightsPage() {
             <Sparkles className="w-3 h-3 inline mr-1" />
             {providerInfo.label}
             {provider?.model && provider.provider !== 'mock' && (
-              <span className="ml-1 opacity-70">Â· {provider.model}</span>
+              <span className="ml-1 opacity-70">- {provider.model}</span>
             )}
           </span>
         )}
@@ -256,7 +256,7 @@ export default function AiInsightsPage() {
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 onFocus={() => searchResults.length > 0 && setShowDropdown(true)}
-                placeholder="Search by name or emailâ€¦"
+                placeholder="Search by name or email..."
                 className={clsx('text-sm pl-8 pr-8', selectedCustomer && 'border-indigo-400 bg-indigo-50/40 dark:bg-indigo-900/10')}
               />
               {searchQuery && (
@@ -307,7 +307,7 @@ export default function AiInsightsPage() {
             className="w-full cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white"
           >
             {customerLoading
-              ? <><Loader2 className="w-4 h-4 animate-spin mr-1.5" />Generatingâ€¦</>
+              ? <><Loader2 className="w-4 h-4 animate-spin mr-1.5" />Generating...</>
               : <><Sparkles className="w-3.5 h-3.5 mr-1.5" />Generate Insight</>
             }
           </Button>
