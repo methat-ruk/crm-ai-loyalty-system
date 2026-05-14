@@ -5,6 +5,7 @@ import { Plus, Search, Tag, Calendar, Zap, Gift, Percent, Star, ChevronLeft, Che
 import { clsx } from 'clsx'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useRole } from '@/hooks/useRole'
 import promotionService, { type CampaignWithExpiry } from '@/services/promotionService'
 import { PromotionForm } from '@/components/Promotion/PromotionForm'
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog'
@@ -48,6 +49,7 @@ const StatusBadge = ({ c }: { c: CampaignWithExpiry }) => {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function PromotionsPage() {
+  const { can } = useRole()
   const [campaigns, setCampaigns] = useState<CampaignWithExpiry[]>([])
 
   const [page, setPage] = useState(1)
@@ -146,13 +148,15 @@ export default function PromotionsPage() {
           <h1 className="text-xl font-semibold text-slate-800 dark:text-slate-100">Promotions</h1>
           <p className="text-sm text-slate-400 dark:text-slate-500 mt-0.5">Manage campaigns and promotions</p>
         </div>
-        <Button
-          onClick={() => { setEditTarget(null); setShowForm(true) }}
-          className="gap-1.5 cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white"
-        >
-          <Plus className="w-4 h-4" />
-          Add Campaign
-        </Button>
+        {can('ADMIN', 'MARKETING') && (
+          <Button
+            onClick={() => { setEditTarget(null); setShowForm(true) }}
+            className="gap-1.5 cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white"
+          >
+            <Plus className="w-4 h-4" />
+            Add Campaign
+          </Button>
+        )}
       </div>
 
       {/* Stats */}
@@ -270,33 +274,39 @@ export default function PromotionsPage() {
 
                 {/* Actions */}
                 <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700/60 mt-auto">
-                  <button
-                    onClick={() => handleToggle(c)}
-                    disabled={c.isExpired}
-                    className={clsx(
-                      'text-xs font-medium px-2.5 py-1 rounded-lg transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed text-white',
-                      c.isActive
-                        ? 'bg-amber-500 hover:bg-amber-600'
-                        : 'bg-emerald-600 hover:bg-emerald-700',
-                    )}
-                  >
-                    {c.isActive ? 'Deactivate' : 'Activate'}
-                  </button>
-                  <div className="flex items-center">
-                    <button
-                      onClick={() => { setEditTarget(c); setShowForm(true) }}
-                      className="text-xs px-2.5 py-1 rounded-lg text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium transition-colors cursor-pointer"
-                    >
-                      Edit
-                    </button>
-                    <span className="text-slate-300 dark:text-slate-600 select-none">|</span>
-                    <button
-                      onClick={() => { setDeleteError(''); setDeleteTarget(c) }}
-                      className="text-xs px-2.5 py-1 rounded-lg text-red-500 hover:text-red-700 dark:hover:text-red-400 font-medium transition-colors cursor-pointer"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">
+                    {can('ADMIN', 'MARKETING')
+                      ? 'Campaign controls enabled'
+                      : 'View only'}
+                  </p>
+                  {can('ADMIN', 'MARKETING') && (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleToggle(c)}
+                        disabled={c.isExpired}
+                        className={clsx(
+                          'text-xs font-medium px-2.5 py-1 rounded-lg transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed text-white',
+                          c.isActive
+                            ? 'bg-amber-500 hover:bg-amber-600'
+                            : 'bg-emerald-600 hover:bg-emerald-700',
+                        )}
+                      >
+                        {c.isActive ? 'Deactivate' : 'Activate'}
+                      </button>
+                      <button
+                        onClick={() => { setEditTarget(c); setShowForm(true) }}
+                        className="text-xs px-2.5 py-1 rounded-lg text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium transition-colors cursor-pointer"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => { setDeleteError(''); setDeleteTarget(c) }}
+                        className="text-xs px-2.5 py-1 rounded-lg text-red-500 hover:text-red-700 dark:hover:text-red-400 font-medium transition-colors cursor-pointer"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             )

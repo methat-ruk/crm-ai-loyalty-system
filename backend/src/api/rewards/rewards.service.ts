@@ -2,7 +2,6 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
-  ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { LoyaltyService } from '../loyalty/loyalty.service.js';
@@ -125,17 +124,31 @@ export class RewardsService {
   // ── Delete ────────────────────────────────────────────────────────────────
 
   async remove(id: string) {
-    await this.findOne(id);
+    const reward = await this.findOne(id);
     const hasRedemptions = await this.prisma.rewardRedemption.count({
       where: { rewardId: id },
     });
     if (hasRedemptions > 0) {
-      throw new ConflictException(
-        'Cannot delete a reward that has been redeemed',
-      );
+      await this.prisma.reward.update({
+        where: { id },
+        data: {
+          isActive: false,
+          stock: 0,
+        },
+      });
+
+      return {
+        message: 'Reward archived because it has redemption history',
+        archived: true,
+        rewardId: reward.id,
+      };
     }
     await this.prisma.reward.delete({ where: { id } });
-    return { message: 'Reward deleted successfully' };
+    return {
+      message: 'Reward deleted successfully',
+      archived: false,
+      rewardId: reward.id,
+    };
   }
 
   // ── Redeem ────────────────────────────────────────────────────────────────

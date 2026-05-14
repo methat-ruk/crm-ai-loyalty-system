@@ -140,9 +140,15 @@ export class RewardsController {
   @Delete(':id')
   @Roles(Role.ADMIN, Role.STAFF)
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Delete a reward (ADMIN, STAFF)' })
+  @ApiOperation({
+    summary:
+      'Delete a reward or archive it when redemption history exists (ADMIN, STAFF)',
+  })
   @ApiParam({ name: 'id' })
-  @ApiResponse({ status: 200, description: 'Reward deleted' })
+  @ApiResponse({
+    status: 200,
+    description: 'Reward deleted or archived successfully',
+  })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   remove(@Param('id') id: string) {
     return this.rewardsService.remove(id);

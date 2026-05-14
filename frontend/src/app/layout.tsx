@@ -1,38 +1,30 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { Toaster } from "sonner";
-import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import type { Metadata } from 'next'
+import type { CSSProperties } from 'react'
+import { ThemeProvider } from '@/components/providers/ThemeProvider'
+import { Toaster } from 'sonner'
+import './globals.css'
 
 export const metadata: Metadata = {
-  title: "CRM AI Loyalty",
-  description: "CRM and AI-powered Loyalty Management System",
-};
+  title: 'CRM AI Loyalty',
+  description: 'CRM and AI-powered Loyalty Management System',
+}
+
+const fallbackFontVars = {
+  '--font-sans': '"Segoe UI", "Helvetica Neue", Arial, sans-serif',
+  '--font-geist-mono': '"Cascadia Code", Consolas, "Courier New", monospace',
+} as CSSProperties
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className="h-full antialiased" style={fallbackFontVars}>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>{children}</ThemeProvider>
         <Toaster richColors position="top-right" />
       </body>
     </html>
-  );
+  )
 }

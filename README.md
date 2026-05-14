@@ -1,198 +1,235 @@
 # CRM AI Loyalty System
 
-A full-stack **CRM + Loyalty Management** platform with AI-powered customer insights. Built as a portfolio project demonstrating Full-Stack Development, REST API Design, Database Design, and AI Integration.
+CRM AI Loyalty is a full-stack demo application for customer management, loyalty operations, promotions, rewards, analytics, and AI-assisted insights.
+
+It is designed to be:
+
+- good for portfolio/demo presentation
+- easy to run locally
+- safe to demo with seeded accounts and mock AI mode
+
+## Highlights
+
+- JWT login with role-based access
+- Customer CRUD and profile detail views
+- Loyalty earn/redeem workflows
+- Rewards catalog and redemptions
+- Promotions management with role restrictions
+- Analytics dashboard
+- AI insights with `mock`, `groq`, or `openai`
+- Frontend auth/session hardening for demo stability
 
 ## Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
-| Frontend | Next.js 16, TypeScript, Tailwind CSS 4, Shadcn UI |
+|---|---|
+| Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS 4, Shadcn UI |
 | Backend | NestJS 11, TypeScript, Zod |
 | Database | PostgreSQL, Prisma ORM |
-| AI | Mock Mode (default) · Groq (free) · OpenAI |
+| AI | Mock mode, Groq, OpenAI |
 
-## Features
+## Project Structure
 
-- **Authentication** — JWT login, role-based access (Admin / Staff / Marketing)
-- **Customer Management** — CRUD, profile, activity timeline
-- **Loyalty System** — Earn & redeem points, transaction history
-- **Rewards Management** — Catalog, stock, redemptions
-- **Promotions** — Campaign CRUD, 4 types, active/inactive toggle
-- **Analytics Dashboard** — Stats, charts, tier distribution, top customers
-- **AI Insights** — Customer behavior summary, churn risk, promo recommendations
-- **Dark Mode** — System preference + manual toggle with persistence
-
----
-
-## Prerequisites
-
-- Node.js 20+
-- PostgreSQL 15+
-- npm
-
----
-
-## Getting Started
-
-### 1. Clone the repository
-
-```bash
-git clone <repo-url>
-cd crm-ai-loyalty
+```text
+crm-ai-loyalty/
+|-- backend/
+|   |-- prisma/
+|   |-- src/
+|   `-- README.md
+|-- frontend/
+|   |-- src/
+|   `-- README.md
+`-- README.md
 ```
 
-### 2. Setup Backend
+## Quick Start
+
+### 1. Install dependencies
 
 ```bash
 cd backend
 npm install
-```
 
-Copy environment file and fill in your values:
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env`:
-
-```env
-DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/crm_ai_db"
-PORT=4000
-JWT_SECRET="any-random-secret-string"
-JWT_EXPIRES_IN="7d"
-FRONTEND_URL="http://localhost:3000"
-
-# AI Provider: mock (no key needed) | groq | openai
-AI_PROVIDER=mock
-AI_API_KEY=
-AI_MODEL=
-```
-
-Run database migration:
-
-```bash
-npx prisma migrate deploy
-```
-
-Seed demo data:
-
-```bash
-npm run seed
-```
-
-Start backend:
-
-```bash
-npm run start:dev
-```
-
-Backend runs at `http://localhost:4000`
-
----
-
-### 3. Setup Frontend
-
-```bash
 cd ../frontend
 npm install
 ```
 
-Copy environment file:
+### 2. Configure environment
+
+Backend:
 
 ```bash
+cd backend
+cp .env.example .env
+```
+
+Frontend:
+
+```bash
+cd frontend
 cp .env.example .env.local
 ```
 
-`.env.local` should contain:
+Minimum frontend env:
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:4000/api
 ```
 
-Start frontend:
+Minimum backend env:
+
+```env
+DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/crm_ai_db"
+PORT=4000
+JWT_SECRET="replace-me"
+JWT_EXPIRES_IN="7d"
+FRONTEND_URL="http://localhost:3000"
+AI_PROVIDER=mock
+AI_API_KEY=
+AI_MODEL=
+```
+
+### 3. Prepare database
 
 ```bash
+cd backend
+npx prisma migrate deploy
+npm run seed
+```
+
+### 4. Start the app
+
+Backend:
+
+```bash
+cd backend
+npm run start:dev
+```
+
+Frontend:
+
+```bash
+cd frontend
 npm run dev
 ```
 
-Frontend runs at `http://localhost:3000`
+Open:
 
----
+- Frontend: [http://localhost:3000](http://localhost:3000)
+- API docs: [http://localhost:4000/api/docs](http://localhost:4000/api/docs)
 
 ## Demo Accounts
 
 | Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@crm.com | password123 |
-| Staff | staff@crm.com | password123 |
-| Marketing | marketing@crm.com | password123 |
+|---|---|---|
+| Admin | `admin@crm.com` | `password123` |
+| Staff | `staff@crm.com` | `password123` |
+| Marketing | `marketing@crm.com` | `password123` |
 
----
+## Recommended Live Demo Flow
 
-## AI Insights Setup
+If you want the safest presentation flow, use this order:
 
-By default the app runs in **Mock Mode** — no API key required. AI responses are pre-written samples.
+1. Log in as `admin`
+2. Show dashboard KPIs and charts
+3. Open customer list and detail page
+4. Demonstrate loyalty earn/redeem flow
+5. Show rewards and a redemption flow
+6. Show promotions
+7. Show AI insights in `mock` mode
+8. Log in as `marketing` to demonstrate promotion-only permissions
 
-To use real AI, update `AI_PROVIDER` in `backend/.env`:
+## Role Summary
 
-**Groq (Free)**
+### Admin
+
+- Full access
+
+### Staff
+
+- Can manage customers, loyalty, and rewards
+- Cannot create or manage promotions
+
+### Marketing
+
+- Can manage promotions
+- Cannot create customers or rewards
+
+## AI Mode
+
+Default mode is:
+
+```env
+AI_PROVIDER=mock
+```
+
+This is recommended for demos because it avoids network/key dependency and still exercises the AI flows.
+
+To use a real provider:
+
 ```env
 AI_PROVIDER=groq
-AI_API_KEY=your-groq-api-key
+AI_API_KEY=your-key
 AI_MODEL=llama-3.1-8b-instant
 ```
-Get a free key at [console.groq.com](https://console.groq.com)
 
-**OpenAI**
+or
+
 ```env
 AI_PROVIDER=openai
 AI_API_KEY=sk-...
 AI_MODEL=gpt-4o-mini
 ```
 
----
+## Verification Status
 
-## Project Structure
+This project has been checked for demo readiness with:
 
-```
-crm-ai-loyalty/
-├── backend/
-│   ├── prisma/
-│   │   ├── schema.prisma
-│   │   ├── seed.ts
-│   │   └── migrations/
-│   └── src/
-│       ├── api/
-│       │   ├── ai/
-│       │   ├── analytics/
-│       │   ├── auth/
-│       │   ├── customers/
-│       │   ├── loyalty/
-│       │   ├── promotions/
-│       │   └── rewards/
-│       └── main.ts
-└── frontend/
-    └── src/
-        ├── app/(dashboard)/
-        │   ├── ai-insights/
-        │   ├── customers/
-        │   ├── dashboard/
-        │   ├── loyalty/
-        │   ├── promotions/
-        │   └── rewards/
-        ├── components/
-        └── services/
+### Frontend
+
+```bash
+npm run lint
+npm run build
 ```
 
-## API Endpoints
+### Backend
 
-| Module | Endpoints |
-|--------|-----------|
-| Auth | `POST /api/auth/login` |
-| Customers | `GET/POST /api/customers` · `GET/PATCH/DELETE /api/customers/:id` |
-| Loyalty | `GET /api/loyalty/:customerId` · `POST /api/loyalty/adjust` |
-| Rewards | `GET/POST /api/rewards` · `GET/PATCH/DELETE /api/rewards/:id` |
-| Promotions | `GET/POST /api/promotions` · `PATCH /api/promotions/:id/toggle` |
-| Analytics | `GET /api/analytics/overview` · `/tier-distribution` · `/top-customers` |
-| AI | `POST /api/ai/customer-insight` · `POST /api/ai/promo-recommendation` · `GET /api/ai/insights` |
+```bash
+npm run test
+npm run build
+```
+
+### Smoke Coverage
+
+The latest readiness pass verified:
+
+- frontend routes responding
+- login for all three demo roles
+- analytics endpoints
+- customer CRUD
+- loyalty earn/redeem
+- rewards create/redeem
+- promotions create/toggle
+- AI insight endpoints
+- role-based permission checks
+
+## Important Behavior
+
+### Production backend start
+
+The backend production start command now runs from:
+
+```text
+dist/src/main.js
+```
+
+because that matches the actual build output.
+
+### Reward delete policy
+
+If a reward has redemption history, deleting it archives it instead of removing it outright. This keeps historical records intact while avoiding demo cleanup pain.
+
+## Extra Docs
+
+- Frontend details: [frontend/README.md](frontend/README.md)
+- Backend details: [backend/README.md](backend/README.md)
