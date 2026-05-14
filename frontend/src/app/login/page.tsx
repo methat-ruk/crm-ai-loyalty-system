@@ -137,7 +137,7 @@ export default function LoginPage() {
                 name="password"
                 type="password"
                 autoComplete="current-password"
-                placeholder="••••••••"
+                placeholder="********"
                 value={form.password}
                 onChange={handleChange}
                 className="h-10 rounded-xl bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-all focus-visible:bg-white focus-visible:ring-2 focus-visible:ring-indigo-400/60 focus-visible:border-indigo-400"

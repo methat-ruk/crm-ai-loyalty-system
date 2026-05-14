@@ -20,7 +20,7 @@ interface CustomerFormProps {
 
 type FieldErrors = Partial<Record<'firstName' | 'lastName' | 'email' | 'phone' | 'dateOfBirth', string>>
 
-// ─── Field wrapper ────────────────────────────────────────────────────────────
+// Field wrapper
 
 const Field = ({
   label,
@@ -48,7 +48,7 @@ const Field = ({
   </div>
 )
 
-// ─── Form ─────────────────────────────────────────────────────────────────────
+// Form
 
 export const CustomerForm = ({ customer, onClose, onSuccess }: CustomerFormProps) => {
   const isEdit = !!customer
@@ -159,7 +159,7 @@ export const CustomerForm = ({ customer, onClose, onSuccess }: CustomerFormProps
             <Input type="email" value={form.email} onChange={set('email')} className={inputClass('email')} />
           </Field>
 
-          <Field label="Phone" error={fieldErrors.phone} hint="มือถือ 08x/09x หรือบ้าน 02x-05x">
+          <Field label="Phone" error={fieldErrors.phone} hint="Mobile 08x/09x or landline 02x-05x">
             <Input
               type="tel"
               value={form.phone}
@@ -188,7 +188,7 @@ export const CustomerForm = ({ customer, onClose, onSuccess }: CustomerFormProps
               disabled={loading}
               className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer"
             >
-              {loading ? 'Saving…' : isEdit ? 'Save Changes' : 'Add Customer'}
+              {loading ? 'Saving...' : isEdit ? 'Save Changes' : 'Add Customer'}
             </Button>
           </div>
         </form>

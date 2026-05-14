@@ -11,7 +11,7 @@ interface TopbarProps {
   onMenuClick: () => void
 }
 
-// ─── Breadcrumb ───────────────────────────────────────────────────────────────
+// Breadcrumb
 
 const segmentLabel: Record<string, string> = {
   dashboard: 'Dashboard',
@@ -39,7 +39,7 @@ const useBreadcrumbs = () => {
   }))
 }
 
-// ─── Topbar ───────────────────────────────────────────────────────────────────
+// Topbar
 
 export const Topbar = ({ onMenuClick }: TopbarProps) => {
   const router = useRouter()
@@ -65,7 +65,7 @@ export const Topbar = ({ onMenuClick }: TopbarProps) => {
     <header className="flex items-center justify-between gap-3 px-4 md:px-6 h-14 bg-white dark:bg-slate-900 shadow-sm border-b border-slate-100 dark:border-slate-700/60 shrink-0">
       {/* Left: hamburger + breadcrumb */}
       <div className="flex items-center gap-2 min-w-0">
-        {/* Hamburger — always visible */}
+        {/* Hamburger - always visible */}
         <button
           onClick={onMenuClick}
           className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors shrink-0 cursor-pointer"
