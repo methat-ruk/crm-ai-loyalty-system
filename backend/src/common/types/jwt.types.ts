@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { Role } from '../../../generated/prisma/index.js';
+import { Role } from '@prisma/client';
 
 export interface JwtUserPayload {
   sub: string;

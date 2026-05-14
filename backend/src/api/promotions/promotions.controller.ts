@@ -25,7 +25,7 @@ import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe.js';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../../common/guards/roles.guard.js';
 import { Roles } from '../../common/decorators/roles.decorator.js';
-import { Role } from '../../../generated/prisma/index.js';
+import { Role } from '@prisma/client';
 import {
   createCampaignSchema,
   type CreateCampaignDto,
