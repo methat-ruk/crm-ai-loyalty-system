@@ -1,14 +1,38 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import type { CustomOrigin } from '@nestjs/common/interfaces/external/cors-options.interface.js';
 import { AppModule } from './app.module.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const allowedOrigins = (process.env.FRONTEND_URL ?? 'http://localhost:3000')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 
   app.setGlobalPrefix('api');
 
+  const corsOrigin: CustomOrigin = (origin, callback) => {
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+
+    const isConfiguredOrigin = allowedOrigins.includes(origin);
+    const isVercelPreview =
+      origin.startsWith('https://crm-ai-loyalty-system-') &&
+      origin.endsWith('.vercel.app');
+
+    if (isConfiguredOrigin || isVercelPreview) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error(`CORS blocked for origin: ${origin}`));
+  };
+
   app.enableCors({
-    origin: process.env.FRONTEND_URL ?? 'http://localhost:3000',
+    origin: corsOrigin,
     credentials: true,
   });
 
